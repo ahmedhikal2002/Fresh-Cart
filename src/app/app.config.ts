@@ -17,7 +17,7 @@ import { provideToastr } from 'ngx-toastr';
 import { headersInterceptor } from './core/interceptors/headers/headers-interceptor';
 import { errorInterceptor } from './core/interceptors/error/error-interceptor';
 import { AuthService } from './core/services/auth/auth-service';
-import { catchError, EMPTY, throwError } from 'rxjs';
+import { catchError, EMPTY } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,12 +28,23 @@ export const appConfig: ApplicationConfig = {
     ),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([headersInterceptor, errorInterceptor])),
+
     provideToastr({
-      timeOut: 5000,
+      timeOut: 50000000,
       positionClass: 'toast-top-right',
       preventDuplicates: false,
       closeButton: true,
       progressBar: true,
+      autoDismiss: true,
+      newestOnTop: true,
+      maxOpened: 3,
+      tapToDismiss: true,
+      iconClasses: {
+        error: 'toast-error',
+        info: 'toast-info',
+        success: 'toast-success',
+        warning: 'toast-warning',
+      },
     }),
     provideAppInitializer(() => {
       const authService = inject(AuthService);

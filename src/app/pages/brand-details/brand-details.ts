@@ -59,7 +59,7 @@ export class BrandDetails {
           this.BrandDetails.set({ name: 'All Brands' } as IBrands);
           this.productParams.update((prev) => ({
             ...prev,
-            'category[in]': undefined,
+            brand: undefined,
           }));
           this.loadAllProduct(this.productParams());
         }

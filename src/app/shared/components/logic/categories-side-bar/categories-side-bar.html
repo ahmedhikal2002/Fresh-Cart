@@ -4,7 +4,7 @@
       Categories
     </h3>
 
-    @if (selectedCategories().length > 0) {
+    @if (selectedCategories().length > 0 && categoriesDetailsComponent()) {
       <button
         type="button"
         (click)="clearSelectedCategories()"
@@ -18,13 +18,11 @@
   <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1">
     @if (allCategoriesLoading()) {
       <app-categories-sidebar-skeleton></app-categories-sidebar-skeleton>
-
     } @else if (allCategoriesError()) {
       <app-error-ui-component
         [message]="allCategoriesErrMsg()"
         (retry)="loadCategories()"
       ></app-error-ui-component>
-
     } @else {
       @if (categoriesDetailsComponent()) {
         <label

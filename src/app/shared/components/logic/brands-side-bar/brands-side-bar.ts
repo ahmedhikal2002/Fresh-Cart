@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { IBrands } from '../../../interfaces/brands/brands';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BrandsService } from '../../../../core/services/brands/brands-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,12 +18,14 @@ export class BrandsSideBar {
   selectedBrand = signal<string>('');
   searchBrand = signal<string>('');
   action = output<string>();
+  loadAllProductsAfterClearBrands = output<void>();
   brandsDetailsComponent = input<boolean>(false);
   activatedRoute = inject(ActivatedRoute);
   allBrandsLoading = signal<boolean>(false);
   allBrandsError = signal<boolean>(false);
   allBrandsErrMsg = signal<string>('');
   private readonly brandsService = inject(BrandsService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   filteredBrands = computed(() => {
     const search = this.searchBrand().trim().toLowerCase();
@@ -76,6 +78,7 @@ export class BrandsSideBar {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
       this.selectedBrand.set(brandId);
+      this.brandsDetailsComponent() && this.router.navigate(['/brand', brandId]);
     } else {
       this.selectedBrand.set('');
     }
@@ -84,6 +87,10 @@ export class BrandsSideBar {
 
   clearBrands() {
     this.selectedBrand.set('');
+    if (this.brandsDetailsComponent()) {
+      this.router.navigate(['/brand', 'all']);
+      // this.loadAllProductsAfterClearBrands.emit();
+    }
   }
 
   ngOnInit(): void {

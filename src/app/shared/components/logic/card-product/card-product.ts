@@ -18,7 +18,7 @@ import { WishlistService } from '../../../../core/services/wishlist/wishlist-ser
 })
 export class CardProduct {
   product = input<IProduct>({} as IProduct);
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
   private cartService = inject(CartService);
   protected wishListService = inject(WishlistService);
   protected addToCartDisabled = signal<string | null>(null);

@@ -17,7 +17,6 @@ import { ReviewCard } from '../../shared/components/logic/review-card/review-car
 import { PaginationComponent } from '../../shared/components/logic/pagination-component/pagination-component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductReviewsSkeleton } from '../../shared/components/skeleton/product-reviews-skeleton/product-reviews-skeleton';
-import { CardProduct } from '../../shared/components/logic/card-product/card-product';
 import { WishlistService } from '../../core/services/wishlist/wishlist-service';
 
 @Component({
@@ -37,7 +36,7 @@ import { WishlistService } from '../../core/services/wishlist/wishlist-service';
 export class ProductDetails implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly productsService = inject(ProductsService);
-  private readonly authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
   private readonly cartService = inject(CartService);
   private readonly reviewService = inject(ReviewService);
   protected readonly wishlistService = inject(WishlistService);

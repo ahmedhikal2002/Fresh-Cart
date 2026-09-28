@@ -116,7 +116,6 @@ export class Navbar implements OnInit {
 
   signOut(): void {
     this.authService.logOut();
-    this.router.navigateByUrl('/login');
   }
 
   ngOnInit(): void {

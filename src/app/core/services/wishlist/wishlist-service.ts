@@ -91,7 +91,7 @@ export class WishlistService {
         ? this.addToWishList(product)
         : this.removeFromWishlist(product._id);
     } else {
-      this.toastr.toastWarning('please login first to complete this action', 'Fresh Cart');
+      this.toastr.toastWarning('please login first to complete this action');
       this.router.navigateByUrl('/login');
     }
   }

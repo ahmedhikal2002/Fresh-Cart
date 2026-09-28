@@ -272,10 +272,12 @@
               (click)="wishlistService.wishListToggle(productData())"
               [disabled]="wishlistService.addToWishlistDisabled() === productData()._id"
               type="button"
-              class="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-500 dark:text-slate-400 hover:text-red-500 hover:border-red-200 dark:hover:border-red-900/50"
+              class="w-10 h-10 sm:w-12 sm:h-12 shrink-0 flex items-center justify-center rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-500 dark:text-slate-400 hover:text-red-500 hover:border-red-200 dark:hover:border-red-900/50"
               aria-label="Add to wishlist"
             >
-              @if (wishlistService.isInWishlist(productData()._id)) {
+              @if (
+                wishlistService.isInWishlist(productData()._id) && authService.isUSerLoggedIn()
+              ) {
                 <i
                   class="fa-solid fa-heart text-base sm:text-lg text-red-500 dark:text-red-600"
                 ></i>
