@@ -1,0 +1,44 @@
+<article
+  class="group relative h-full mx-3 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:shadow-lg hover:-translate-y-1"
+>
+  <!-- Quote icon -->
+  <i
+    class="fa-solid fa-quote-right absolute top-5 right-5 text-3xl text-main-color/15 dark:text-main-color/25 group-hover:text-main-color/30 transition-colors"
+  ></i>
+
+  <!-- User -->
+  <div class="flex items-center gap-3 mb-4">
+    <!-- Avatar -->
+    <div
+      class="w-12 h-12 rounded-full bg-main-color/10 dark:bg-main-color/20 text-main-color flex items-center justify-center font-bold text-lg shrink-0"
+    >
+      {{ review()?.user?.name?.charAt(0)?.toUpperCase() }}
+    </div>
+
+    <div class="min-w-0">
+      <h4 class="font-semibold text-gray-900 dark:text-white truncate">
+        {{ review()?.user?.name }}
+      </h4>
+      <p class="text-xs text-gray-500 dark:text-slate-400">Verified Customer</p>
+    </div>
+  </div>
+
+  <!-- Rating -->
+  <div class="flex items-center gap-1 mb-3">
+    @for (star of [1, 2, 3, 4, 5]; track star) {
+      @if (star <= (review()?.rating ?? 0)) {
+        <i class="fa-solid fa-star text-yellow-400 dark:text-yellow-300 text-sm"></i>
+      } @else {
+        <i class="fa-regular fa-star text-gray-300 dark:text-slate-600 text-sm"></i>
+      }
+    }
+    <span class="ml-2 text-xs font-medium text-gray-500 dark:text-slate-400">
+      {{ review()?.rating }}
+    </span>
+  </div>
+
+  <!-- Review text -->
+  <p class="text-sm leading-relaxed text-gray-600 dark:text-slate-300 line-clamp-4 min-h-20">
+    "{{ review()?.review }}"
+  </p>
+</article>

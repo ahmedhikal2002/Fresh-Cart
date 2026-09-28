@@ -1,0 +1,216 @@
+<section class="min-h-screen max-w-362.5 mx-auto px-5 py-3 sm:px-6 lg:px-8">
+  <div class="mb-5">
+    <h1 class="text-3xl sm:text-4xl text-gray-900 dark:text-white">My Orders</h1>
+    <p class="mt-2 text-gray-500 dark:text-slate-400">
+      Track and manage all your orders in one place
+    </p>
+  </div>
+  <div class="max-w-5xl mx-auto">
+    <!-- ================= Loading ================= -->
+    @if (loading()) {
+      <app-all-orders-skeleton></app-all-orders-skeleton>
+    }
+
+    <!-- ================= Error ================= -->
+    @else if (error()) {
+      <app-error-ui-component
+        [message]="errMsg()"
+        (retry)="loadUserOrders(userId())"
+      ></app-error-ui-component>
+    }
+
+    <!-- ================= Empty ================= -->
+    @else if (orders().length === 0) {
+      <div
+        class="text-center py-16 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800"
+      >
+        <app-empty-state-component title="No orders yet"></app-empty-state-component>
+        <p class="mt-2 text-gray-500 dark:text-slate-400 max-w-md mx-auto">
+          You haven't placed any orders yet. Start shopping to see your orders here.
+        </p>
+
+        <a
+          routerLink="/products"
+          class="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold hover:opacity-90 active:scale-[0.98] transition"
+        >
+          <i class="fa-solid fa-bag-shopping"></i>
+          Start Shopping
+        </a>
+      </div>
+    }
+
+    <!-- ================= Orders List ================= -->
+    @else {
+      <div class="space-y-4">
+        @for (order of orders(); track order._id) {
+          <article
+            class="group bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm hover:shadow-lg hover:border-main-color/30 dark:hover:border-main-color/30 transition-all duration-300 overflow-hidden"
+          >
+            <!-- ===== Card Header ===== -->
+            <div
+              class="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-gray-100 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-800/30"
+            >
+              <div class="flex items-center gap-3 flex-wrap">
+                <!-- Order ID -->
+                <div class="flex items-center gap-2">
+                  <div
+                    class="w-9 h-9 rounded-lg bg-main-color/10 text-main-color flex items-center justify-center"
+                  >
+                    <i class="fa-solid fa-receipt text-sm"></i>
+                  </div>
+                  <div>
+                    <p
+                      class="text-[11px] uppercase tracking-wider text-gray-400 dark:text-slate-500 font-medium"
+                    >
+                      Order ID
+                    </p>
+                    <p class="text-sm font-bold text-gray-900 dark:text-white font-mono">
+                      #{{ order._id.slice(-8).toUpperCase() }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Divider -->
+                <span class="hidden sm:block w-px h-8 bg-gray-200 dark:bg-slate-700"></span>
+
+                <!-- Date -->
+                <div>
+                  <p
+                    class="text-[11px] uppercase tracking-wider text-gray-400 dark:text-slate-500 font-medium"
+                  >
+                    Placed on
+                  </p>
+                  <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                    {{ order.createdAt | date: 'MMM d, y' }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Status Badges -->
+              <div class="flex items-center gap-2 flex-wrap">
+                <!-- Payment Status -->
+                @if (order.isPaid) {
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                  >
+                    <i class="fa-solid fa-circle-check text-2xs"></i>
+                    Paid
+                  </span>
+                } @else {
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+                  >
+                    <i class="fa-solid fa-clock text-2xs"></i>
+                    Unpaid
+                  </span>
+                }
+
+                <!-- Delivery Status -->
+                @if (order.isDelivered) {
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                  >
+                    <i class="fa-solid fa-truck-fast text-2xs"></i>
+                    Delivered
+                  </span>
+                } @else {
+                  <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                  >
+                    <i class="fa-solid fa-truck text-2xs"></i>
+                    Processing
+                  </span>
+                }
+              </div>
+            </div>
+
+            <!-- ===== Card Body ===== -->
+            <div class="p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+              <!-- Product Thumbnails -->
+              <div class="flex items-center shrink-0">
+                @for (item of order.cartItems.slice(0, 3); track item._id; let i = $index) {
+                  <div
+                    class="w-14 h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900"
+                    [class.-ml-3]="i > 0"
+                    [style.zIndex]="10 - i"
+                  >
+                    <img
+                      [src]="item.product.imageCover"
+                      [alt]="item.product.title"
+                      loading="lazy"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                }
+
+                @if (order.cartItems.length > 3) {
+                  <div
+                    class="w-14 h-14 rounded-xl bg-gray-100 dark:bg-slate-800 border-2 border-white dark:border-slate-900 flex items-center justify-center -ml-3 text-xs font-bold text-gray-600 dark:text-slate-300"
+                  >
+                    +{{ order.cartItems.length - 3 }}
+                  </div>
+                }
+              </div>
+
+              <!-- Order Summary -->
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                  {{ order.cartItems.length }}
+                  {{ order.cartItems.length === 1 ? 'item' : 'items' }}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-slate-400 mt-0.5 truncate">
+                  {{ getItemsPreview(order) }}
+                </p>
+
+                <div class="flex items-center gap-3 mt-2 flex-wrap">
+                  <span
+                    class="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-400"
+                  >
+                    <i
+                      class="fa-solid"
+                      [class.fa-credit-card]="order.paymentMethodType === 'card'"
+                      [class.fa-money-bill-wave]="order.paymentMethodType === 'cash'"
+                    ></i>
+                    {{ order.paymentMethodType === 'card' ? 'Card' : 'Cash on Delivery' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Total Price -->
+              <div class="text-right shrink-0">
+                <p
+                  class="text-[11px] uppercase tracking-wider text-gray-400 dark:text-slate-500 font-medium"
+                >
+                  Total
+                </p>
+                <p class="text-xl font-bold text-gray-900 dark:text-white">
+                  {{ order.totalOrderPrice | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+                </p>
+              </div>
+            </div>
+
+            <!-- ===== Card Footer ===== -->
+            <div
+              class="px-5 py-3 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between gap-3"
+            >
+              <p class="text-xs text-gray-400 dark:text-slate-500 hidden sm:block">
+                <i class="fa-solid fa-location-dot me-1"></i>
+                {{ order.shippingAddress?.city || 'N/A' }}
+              </p>
+
+              <a
+                [routerLink]="['/order', order._id]"
+                class="group/link inline-flex items-center gap-2 text-sm font-semibold text-main-color hover:gap-3 transition-all"
+              >
+                View Details
+                <i
+                  class="fa-solid fa-arrow-right text-xs transition-transform group-hover/link:translate-x-0.5"
+                ></i>
+              </a>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,544 @@
+<section class="min-h-screen max-w-362.5 mx-auto py-10 px-4 sm:px-6 lg:px-8">
+  <a
+    routerLink="/allorders"
+    class="border-2 rounded-sm py-2 px-4 border-gray-500 hover:border-main-color inline-flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-slate-400 hover:text-main-color transition-colors mb-6"
+  >
+    <i class="fa-solid fa-arrow-left text-xs"></i>
+    Back to Orders
+  </a>
+  <div class="max-w-5xl mx-auto">
+    <!-- ================= Loading ================= -->
+    @if (loadingOrder()) {
+      <app-order-details-skeleton></app-order-details-skeleton>
+    }
+
+    <!-- ================= Error ================= -->
+    @else if (errorOrder()) {
+      <app-error-ui-component
+        [message]="errMsgOrder()"
+        (retry)="loadOrderDetails(order()._id || '')"
+      ></app-error-ui-component>
+    }
+
+    <!-- ================= Order Details ================= -->
+    @else if (order(); as o) {
+      <!-- ===== Header Card ===== -->
+      <div
+        class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm overflow-hidden mb-6"
+      >
+        <div class="p-6 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p
+              class="text-[11px] uppercase tracking-wider text-gray-400 dark:text-slate-500 font-medium"
+            >
+              Order ID
+            </p>
+            <h1 class="mt-1 text-2xl font-bold text-gray-900 dark:text-white font-mono">
+              #{{ o._id.slice(-10).toUpperCase() }}
+            </h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-slate-400 flex items-center gap-2">
+              <i class="fa-regular fa-calendar text-xs"></i>
+              Placed on {{ o.createdAt | date: 'MMM d, y • h:mm a' }}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Payment Status -->
+            @if (o.isPaid) {
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+              >
+                <i class="fa-solid fa-circle-check text-2xs"></i>
+                Paid
+              </span>
+            } @else {
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+              >
+                <i class="fa-solid fa-clock text-2xs"></i>
+                Unpaid
+              </span>
+            }
+
+            <!-- Delivery Status -->
+            @if (o.isDelivered) {
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+              >
+                <i class="fa-solid fa-truck-fast text-2xs"></i>
+                Delivered
+              </span>
+            } @else {
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+              >
+                <i class="fa-solid fa-truck text-2xs"></i>
+                Processing
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Info Grid ===== -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <!-- ===== Shipping Address ===== -->
+        <div
+          class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm p-6"
+        >
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="w-10 h-10 rounded-lg bg-main-color/10 text-main-color flex items-center justify-center"
+            >
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <h2 class="text-sm font-bold text-gray-900 dark:text-white">Shipping Address</h2>
+              <p class="text-xs text-gray-500 dark:text-slate-400">Delivery destination</p>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-user text-xs text-gray-400 mt-1 w-4"></i>
+              <span class="text-gray-700 dark:text-slate-300 font-medium">{{ o.user.name }}</span>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-phone text-xs text-gray-400 mt-1 w-4"></i>
+              <span class="text-gray-700 dark:text-slate-300">{{
+                o?.shippingAddress?.phone || ''
+              }}</span>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-city text-xs text-gray-400 mt-1 w-4"></i>
+              <span class="text-gray-700 dark:text-slate-300">
+                {{ o.shippingAddress?.city || '' }}
+                @if (o.shippingAddress?.postalCode || '') {
+                  • {{ o.shippingAddress?.postalCode || '' }}
+                }
+              </span>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-house text-xs text-gray-400 mt-1 w-4"></i>
+              <span class="text-gray-700 dark:text-slate-300">{{
+                o.shippingAddress?.details || ''
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Payment Info ===== -->
+        <div
+          class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm p-6"
+        >
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="w-10 h-10 rounded-lg bg-main-color/10 text-main-color flex items-center justify-center"
+            >
+              <i class="fa-solid fa-credit-card"></i>
+            </div>
+            <div>
+              <h2 class="text-sm font-bold text-gray-900 dark:text-white">Payment Method</h2>
+              <p class="text-xs text-gray-500 dark:text-slate-400">How you paid</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <i
+                class="fa-solid text-2xl text-gray-400"
+                [class.fa-credit-card]="o.paymentMethodType === 'card'"
+                [class.fa-money-bill-wave]="o.paymentMethodType === 'cash'"
+              ></i>
+              <div>
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                  {{ o.paymentMethodType === 'card' ? 'Credit / Debit Card' : 'Cash on Delivery' }}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-slate-400">
+                  {{ o.paymentMethodType === 'card' ? 'Paid online' : 'Pay when delivered' }}
+                </p>
+              </div>
+            </div>
+
+            @if (o.isPaid) {
+              <div
+                class="pt-3 border-t border-gray-100 dark:border-slate-800 flex items-center gap-2 text-xs"
+              >
+                <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                <span class="text-gray-600 dark:text-slate-400"> Payment confirmed </span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Order Items ===== -->
+      <div
+        class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm overflow-hidden mb-6"
+      >
+        <div
+          class="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-main-color/10 text-main-color flex items-center justify-center"
+            >
+              <i class="fa-solid fa-box"></i>
+            </div>
+            <div>
+              <h2 class="text-sm font-bold text-gray-900 dark:text-white">Order Items</h2>
+              <p class="text-xs text-gray-500 dark:text-slate-400">
+                {{ o.cartItems.length }} {{ o.cartItems.length === 1 ? 'item' : 'items' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="divide-y divide-gray-100 dark:divide-slate-800">
+          @for (item of o.cartItems; track item._id) {
+            <div class="p-5 hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors">
+              <div class="flex items-center gap-4">
+                <!-- Image -->
+                <div
+                  class="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 dark:bg-slate-800 shrink-0"
+                >
+                  <img
+                    [src]="item.product.imageCover"
+                    [alt]="item.product.title"
+                    loading="lazy"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+
+                <!-- Info -->
+                <div class="flex-1 min-w-0">
+                  <p class="text-[11px] uppercase tracking-wider text-main-color font-semibold">
+                    {{ item.product.category.name }}
+                  </p>
+                  <h3
+                    class="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 mt-0.5"
+                  >
+                    {{ item.product.title }}
+                  </h3>
+                  <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                    {{ item.product.brand.name }}
+                  </p>
+                </div>
+
+                <!-- Qty + Price -->
+                <div class="text-right shrink-0">
+                  <p class="text-xs text-gray-500 dark:text-slate-400">
+                    Quantity:
+                    <span class="font-semibold text-gray-700 dark:text-slate-300">{{
+                      item.count
+                    }}</span>
+                  </p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-1">
+                    {{ item.price * item.count | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+                  </p>
+                  <p class="text-[11px] text-gray-400 dark:text-slate-500">
+                    {{ item.price | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }} each
+                  </p>
+                </div>
+              </div>
+              <div class="mt-6">
+                @if (
+                  UserReviewForProduct().length > 0 && checkReviewForEachProduct(item.product._id)
+                ) {
+                  @for (userReview of UserReviewForProduct(); track userReview._id) {
+                    @if (userReview.product === item.product._id) {
+                      <!-- Review Card -->
+                      <div
+                        class="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4 shadow-sm transition-shadow duration-300 hover:shadow-md"
+                      >
+                        <!-- Header -->
+                        <div class="flex items-center justify-between gap-3 mb-3">
+                          <div>
+                            <p class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                              Your Review
+                            </p>
+
+                            <div class="flex items-center gap-1 mt-1">
+                              @for (rate of [1, 2, 3, 4, 5]; track rate) {
+                                @if (rate <= userReview.rating) {
+                                  <i class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                                } @else {
+                                  <i
+                                    class="fa-regular fa-star text-gray-300 dark:text-gray-600 text-sm"
+                                  ></i>
+                                }
+                              }
+
+                              <span class="ml-1 text-xs text-gray-500 dark:text-gray-400">
+                                {{ userReview.rating }}/5
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="flex items-center gap-2">
+                            <!-- Update -->
+                            <button
+                              (click)="updateReview(item.product._id, userReview)"
+                              type="button"
+                              aria-label="Edit"
+                              title="Edit"
+                              class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-all duration-200 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/30 active:scale-95 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
+                            >
+                              <i class="fa-solid fa-pen text-sm"></i>
+                            </button>
+
+                            <!-- Delete -->
+                            <button
+                              type="button"
+                              (click)="confirmDelete(userReview._id)"
+                              aria-label="Delete"
+                              title="Delete"
+                              class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 transition-all duration-200 hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-500/30 active:scale-95 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white"
+                            >
+                              <i class="fa-solid fa-trash text-sm"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Review text -->
+                        <div class="rounded-lg bg-gray-50 dark:bg-slate-800 px-4 py-3">
+                          <p class="text-sm leading-6 text-gray-600 dark:text-gray-300">
+                            {{ userReview.review }}
+                          </p>
+                        </div>
+                      </div>
+                    }
+                  }
+                } @else {
+                  <!-- No Review -->
+                  <div
+                    class="rounded-xl border border-dashed border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50 p-5 text-center"
+                  >
+                    <div
+                      class="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-main-color/10 text-main-color"
+                    >
+                      <i class="fa-regular fa-star"></i>
+                    </div>
+
+                    <p class="text-sm font-medium text-gray-800 dark:text-gray-100">
+                      You haven't reviewed this product yet
+                    </p>
+
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      Share your experience with other customers
+                    </p>
+
+                    <button
+                      type="button"
+                      class="mt-4 inline-flex items-center gap-2 rounded-lg bg-main-color px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity cursor-pointer"
+                      (click)="addReviewForProduct(item.product._id)"
+                    >
+                      <i class="fa-solid fa-pen text-xs"></i>
+                      Add Review
+                    </button>
+                  </div>
+                }
+
+                <!-- Add Review Form -->
+                @if (addReview() === item.product._id) {
+                  <div
+                    class="mt-4 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-sm"
+                  >
+                    <!-- Form Header -->
+                    <div class="mb-5">
+                      <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                        Write a Review
+                      </h3>
+
+                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                        Tell us what you think about this product
+                      </p>
+                    </div>
+
+                    <form
+                      [formGroup]="reviewFrom"
+                      (ngSubmit)="sentReview(item.product._id)"
+                      class="space-y-5"
+                    >
+                      @if (createReviewError()) {
+                        <div
+                          class="mt-3 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-600 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-400"
+                        >
+                          <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+
+                          <span>
+                            {{ createReviewErrorMessage() }}
+                          </span>
+                        </div>
+                      }
+
+                      @if (updateReviewError()) {
+                        <div
+                          class="mt-3 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-600 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-400"
+                        >
+                          <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+
+                          <span>
+                            {{ updateReviewMsgErr() }}
+                          </span>
+                        </div>
+                      }
+                      @let review = reviewFrom.get('review');
+                      @let rating = reviewFrom.get('rating');
+
+                      <!-- Rating -->
+                      <div>
+                        <label
+                          class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                        >
+                          Rating
+                        </label>
+
+                        <div class="flex items-center gap-1">
+                          @for (star of [1, 2, 3, 4, 5]; track star) {
+                            @if (star <= reviewFrom.controls.rating.value!) {
+                              <i
+                                (click)="setRating(star)"
+                                class="fa-solid fa-star text-yellow-400 text-xl cursor-pointer transition-transform duration-150 hover:scale-110"
+                              ></i>
+                            } @else {
+                              <i
+                                (click)="setRating(star)"
+                                class="fa-regular fa-star text-gray-300 dark:text-gray-600 text-xl cursor-pointer transition-transform duration-150 hover:scale-110"
+                              ></i>
+                            }
+                          }
+
+                          <span class="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                            {{ rating?.value || 0 }}/5
+                          </span>
+                        </div>
+
+                        <input type="number" formControlName="rating" class="hidden" />
+
+                        @if (rating?.invalid && rating?.touched) {
+                          @if (rating?.hasError('required') || rating?.hasError('min')) {
+                            <p class="mt-1 text-xs text-red-500">Please select a rating</p>
+                          }
+                        }
+                      </div>
+
+                      <!-- Review -->
+                      <div>
+                        <label
+                          class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-200"
+                        >
+                          Your Review
+                        </label>
+
+                        <textarea
+                          formControlName="review"
+                          rows="4"
+                          placeholder="Write your experience with this product..."
+                          class="w-full resize-none rounded-lg border border-gray-300 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:border-main-color focus:ring-2 focus:ring-main-color/20 transition-all"
+                        ></textarea>
+
+                        @if (review?.touched && review?.invalid) {
+                          @if (review?.hasError('required')) {
+                            <p class="mt-1 text-xs text-red-500">Review is required</p>
+                          }
+                        }
+                      </div>
+
+                      <!-- Actions -->
+                      <div class="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          class="rounded-lg px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          (click)="addReviewForProduct('')"
+                        >
+                          Cancel
+                        </button>
+
+                        <button
+                          [disabled]="creatingReview() || updateReviewLoading()"
+                          type="submit"
+                          class="inline-flex items-center gap-2 rounded-lg bg-main-color px-5 py-2 text-sm font-medium text-white hover:opacity-90 transition-opacity cursor-pointer"
+                        >
+                          @if (creatingReview()) {
+                            Creating review
+                            <i class="fa-solid fa-spinner fa-pulse"></i>
+                          } @else if (updateReviewLoading()) {
+                            Updating Review
+                            <i class="fa-solid fa-spinner fa-pulse"></i>
+                          } @else {
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                            Save Review
+                          }
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ===== Order Summary ===== -->
+      <div
+        class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm overflow-hidden"
+      >
+        <div
+          class="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex items-center gap-3"
+        >
+          <div
+            class="w-10 h-10 rounded-lg bg-main-color/10 text-main-color flex items-center justify-center"
+          >
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-gray-900 dark:text-white">Order Summary</h2>
+            <p class="text-xs text-gray-500 dark:text-slate-400">Price breakdown</p>
+          </div>
+        </div>
+
+        <div class="p-6 space-y-3">
+          <!-- Subtotal -->
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-500 dark:text-slate-400">Subtotal</span>
+            <span class="font-medium text-gray-900 dark:text-white">
+              {{ getSubtotal(o) | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+            </span>
+          </div>
+
+          <!-- Shipping -->
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-500 dark:text-slate-400">Shipping</span>
+            <span class="font-medium text-gray-900 dark:text-white">
+              @if (o.shippingPrice === 0) {
+                <span class="text-emerald-500 font-semibold">Free</span>
+              } @else {
+                {{ o.shippingPrice | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+              }
+            </span>
+          </div>
+
+          <!-- Tax -->
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-500 dark:text-slate-400">Tax</span>
+            <span class="font-medium text-gray-900 dark:text-white">
+              {{ o.taxPrice | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+            </span>
+          </div>
+
+          <!-- Total -->
+          <div
+            class="pt-4 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between"
+          >
+            <span class="text-base font-bold text-gray-900 dark:text-white">Total</span>
+            <span class="text-2xl font-bold text-main-color">
+              {{ o.totalOrderPrice | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

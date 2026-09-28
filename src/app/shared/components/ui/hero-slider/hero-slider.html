@@ -1,0 +1,42 @@
+<section class="px-5 mt-6 mb-6">
+  <div class="flex gap-4">
+    <!-- ===== Main Slider ===== -->
+    <div class="w-full md:w-3/4 overflow-hidden rounded-2xl">
+      <owl-carousel-o [options]="customOptions">
+        @for (img of sliderImages; track $index) {
+          <ng-template carouselSlide>
+            <div class="overflow-hidden rounded-2xl">
+              <img
+                [src]="img.src"
+                [alt]="img.alt"
+                loading="lazy"
+                class="w-full h-50 md:h-75 object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
+          </ng-template>
+        }
+      </owl-carousel-o>
+    </div>
+
+    <!-- ===== Side Banners ===== -->
+    <div class="hidden md:flex md:w-1/4 flex-col gap-4">
+      <div class="overflow-hidden rounded-2xl flex-1">
+        <img
+          src="/images/grocery-banner.png"
+          alt="Grocery banner"
+          loading="lazy"
+          class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+        />
+      </div>
+
+      <div class="overflow-hidden rounded-2xl flex-1">
+        <img
+          src="/images/grocery-banner-2.jpeg"
+          alt="Grocery banner 2"
+          loading="lazy"
+          class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+        />
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,57 @@
+<div>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    @for (item of [1, 2, 3, 4]; track $index) {
+      @if ($index < cardsCount()) {
+        <div
+          class="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-slate-700 dark:bg-slate-800/60"
+        >
+          <!-- Header -->
+          <div class="mb-4 flex items-start justify-between gap-3">
+            <div class="flex min-w-0 items-center gap-3">
+              <!-- Icon -->
+              <div class="skeleton h-10 w-10 shrink-0 rounded-lg"></div>
+
+              <!-- Name + City -->
+              <div class="min-w-0 space-y-2">
+                <div
+                  class="skeleton h-4 rounded"
+                  [style.width.px]="80 + (($index * 15) % 60)"
+                ></div>
+
+                <div class="skeleton h-3 w-16 rounded"></div>
+              </div>
+            </div>
+
+            <!-- Delete button -->
+            <div class="skeleton h-9 w-9 shrink-0 rounded-lg"></div>
+          </div>
+
+          <!-- Details -->
+          <div class="space-y-3">
+            <!-- Address -->
+            <div class="flex items-start gap-3">
+              <div class="skeleton mt-0.5 h-4 w-4 shrink-0 rounded"></div>
+
+              <div class="flex-1 space-y-1.5">
+                <div class="skeleton h-3.5 w-full rounded"></div>
+                <div class="skeleton h-3.5 w-2/3 rounded"></div>
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="flex items-center gap-3">
+              <div class="skeleton h-4 w-4 shrink-0 rounded"></div>
+              <div class="skeleton h-3.5 w-32 rounded"></div>
+            </div>
+
+            <!-- City -->
+            <div class="flex items-center gap-3">
+              <div class="skeleton h-4 w-4 shrink-0 rounded"></div>
+              <div class="skeleton h-3.5 w-24 rounded"></div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -1,0 +1,164 @@
+<form
+  [formGroup]="editProfileFrom"
+  (ngSubmit)="editProfileSubmit()"
+  class="rounded-2xl mt-3 border border-gray-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6"
+>
+  @let name = editProfileFrom.get('name');
+  @let email = editProfileFrom.get('email');
+  @let phone = editProfileFrom.get('phone');
+
+  <!-- Header -->
+  <div class="mb-6 flex items-start gap-4">
+    <div>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Edit Profile</h2>
+
+      <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
+        Update your personal information.
+      </p>
+    </div>
+  </div>
+
+  <!-- API Error -->
+  @if (error()) {
+    <div
+      class="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-400"
+    >
+      <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+
+      <span>{{ errMsg() }}</span>
+    </div>
+  }
+
+  <!-- Inputs -->
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+    <!-- Name -->
+    <div>
+      <label for="name" class="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300">
+        Full Name
+      </label>
+
+      <div class="relative">
+        <i
+          class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-slate-500"
+        ></i>
+
+        <input
+          type="text"
+          name="name"
+          id="name"
+          formControlName="name"
+          autocomplete="name"
+          placeholder="Enter your name"
+          [class.border-red-500]="name?.invalid && name?.touched"
+          class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-main-color focus:ring-2 focus:ring-main-color/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-main-color"
+        />
+      </div>
+
+      @if (name?.touched && name?.hasError('required')) {
+        <p class="mt-1.5 text-sm text-red-500">Name is required.</p>
+      } @else if (name?.hasError('noWhitespace')) {
+        <p class="mt-1.5 text-sm text-red-500">name cannot be empty spaces</p>
+      }
+
+      @if (name?.touched && name?.hasError('minlength')) {
+        <p class="mt-1.5 text-sm text-red-500">Name must be at least 3 characters.</p>
+      }
+
+      @if (name?.touched && name?.hasError('maxlength')) {
+        <p class="mt-1.5 text-sm text-red-500">Name must not exceed 20 characters.</p>
+      }
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email" class="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300">
+        Email Address
+      </label>
+
+      <div class="relative">
+        <i
+          class="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-slate-500"
+        ></i>
+
+        <input
+          type="email"
+          name="email"
+          id="email"
+          formControlName="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          [class.border-red-500]="email?.invalid && email?.touched"
+          class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-main-color focus:ring-2 focus:ring-main-color/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-main-color"
+        />
+      </div>
+
+      @if (email?.touched && email?.hasError('required')) {
+        <p class="mt-1.5 text-sm text-red-500">Email is required.</p>
+
+      } @else if (email?.hasError('email') || email?.hasError('pattern')) {
+        <p class="mt-1.5 text-xs text-red-500">Please enter a valid email address</p>
+      }
+    </div>
+
+    <!-- Phone -->
+    <div class="md:col-span-2">
+      <label for="phone" class="mb-2 block text-sm font-medium text-gray-700 dark:text-slate-300">
+        Phone Number
+      </label>
+
+      <div class="relative">
+        <i
+          class="fa-solid fa-phone absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-slate-500"
+        ></i>
+
+        <input
+          type="tel"
+          name="phone"
+          id="phone"
+          formControlName="phone"
+          autocomplete="tel"
+          placeholder="01XXXXXXXXX"
+          [class.border-red-500]="phone?.invalid && phone?.touched"
+          class="w-full rounded-xl border border-gray-300 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-main-color focus:ring-2 focus:ring-main-color/20 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-main-color"
+        />
+      </div>
+
+      @if (phone?.touched && phone?.hasError('required')) {
+        <p class="mt-1.5 text-sm text-red-500">Phone number is required.</p>
+      }
+
+      @if (phone?.touched && phone?.hasError('pattern')) {
+        <p class="mt-1.5 text-sm text-red-500">Please enter a valid Egyptian phone number.</p>
+      }
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div
+    class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-100 pt-5 dark:border-slate-800 sm:flex-row sm:justify-end"
+  >
+    <!-- Cancel -->
+    <button
+      type="button"
+      (click)="closeEditProfile.emit()"
+      class="rounded-xl px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+    >
+      Cancel
+    </button>
+
+    <!-- Save -->
+    <button
+      type="submit"
+      [disabled]="loading()"
+      class="inline-flex items-center justify-center gap-2 rounded-xl bg-main-color px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:-translate-y-0.5 hover:bg-main-color/90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-main-color/30 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-sm"
+    >
+      @if (loading()) {
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Saving...
+      } @else {
+        <i class="fa-solid fa-check"></i>
+        Save Changes
+      }
+    </button>
+  </div>
+</form>

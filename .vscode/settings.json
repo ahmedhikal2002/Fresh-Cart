@@ -1,0 +1,14 @@
+{
+  "tailwindCSS.experimental.configFile": "src/styles.scss",
+  "files.associations": {
+    "*.html": "html"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "typescript": "javascript"
+  },
+  "cSpell.words": ["Favourite", "toastr"]
+}

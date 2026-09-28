@@ -1,0 +1,18 @@
+.not-found-svg-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+
+  svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+@media (min-width: 670px) {
+  .not-found-svg-wrapper {
+    margin: -70px auto 0px 0px;
+  }
+}

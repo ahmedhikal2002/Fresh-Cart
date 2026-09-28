@@ -1,0 +1,385 @@
+<section class="max-w-362.5 mx-auto min-h-screen py-10">
+  @if (productLoading()) {
+    <app-product-details-skeleton></app-product-details-skeleton>
+  } @else if (productError()) {
+    <app-error-ui-component
+      (retry)="loadProductData()"
+      [message]="productErrorMessage()"
+    ></app-error-ui-component>
+  } @else {
+    <div class="px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 rounded-2xl p-6 lg:p-8">
+        <!-- ================= Images ================= -->
+        <div class="w-full">
+          @if (productImgs().length > 0) {
+            <!-- Main Image -->
+            <div
+              class="rounded-2xl overflow-hidden bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-slate-800"
+            >
+              <img
+                [src]="activeImg() || productData().imageCover"
+                [alt]="productData().title"
+                loading="lazy"
+                class="w-full h-87.5 lg:h-120 object-contain p-6 transition-transform duration-300"
+              />
+            </div>
+
+            <!-- Thumbnails -->
+            <div class="flex gap-3 mt-4 flex-wrap">
+              @for (item of productImgs(); track $index) {
+                <button
+                  type="button"
+                  (click)="changImg(item)"
+                  class="w-20 h-20 rounded-xl overflow-hidden border-2 bg-white dark:bg-slate-800 cursor-pointer"
+                  [class.border-main-color]="activeImg() === item"
+                  [class.border-transparent]="activeImg() !== item"
+                  [class.opacity-60]="activeImg() !== item"
+                  [class.hover:opacity-100]="activeImg() !== item"
+                  [class.shadow-md]="activeImg() === item"
+                >
+                  <img
+                    [src]="item"
+                    [alt]="productData().title + ' thumbnail'"
+                    loading="lazy"
+                    class="w-full h-full object-cover"
+                  />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- ================= Product Info ================= -->
+        <div class="flex flex-col">
+          <!-- ===== Top: Category + Badges ===== -->
+          <div class="flex items-center gap-2 flex-wrap mb-4">
+            <span
+              class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-main-color/10 text-main-color dark:bg-main-color/15"
+            >
+              {{ productData().category.name }}
+            </span>
+
+            @if (productData().priceAfterDiscount) {
+              <span
+                class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+              >
+                <i class="fa-solid fa-fire text-2xs"></i>
+                Sale
+              </span>
+            }
+
+            @if (productData().quantity > 0) {
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                In Stock
+              </span>
+            } @else {
+              <span
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500 dark:bg-slate-800 dark:text-slate-400"
+              >
+                Out of Stock
+              </span>
+            }
+          </div>
+
+          <!-- ===== Title ===== -->
+          <h1
+            class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight"
+          >
+            {{ productData().title }}
+          </h1>
+
+          <!-- ===== Rating + Brand row ===== -->
+          <div class="flex items-center gap-4 flex-wrap mt-4">
+            <!-- Rating -->
+            <div class="flex items-center gap-2">
+              <div class="flex items-center gap-0.5 text-yellow-400">
+                @for (star of [1, 2, 3, 4, 5]; track star) {
+                  @if (star <= productData().ratingsAverage) {
+                    <i class="fa-solid fa-star text-sm"></i>
+                  } @else {
+                    <i class="fa-regular fa-star text-sm"></i>
+                  }
+                }
+              </div>
+              <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                {{ productData().ratingsAverage }}
+              </span>
+              <a
+                (click)="scrollToReviewsSection()"
+                class="text-sm cursor-pointer text-gray-500 dark:text-slate-400 hover:text-main-color transition-colors underline-offset-2 hover:underline"
+              >
+                ({{ productData().ratingsQuantity }} reviews)
+              </a>
+            </div>
+
+            <!-- Divider -->
+            <span class="hidden sm:block w-px h-5 bg-gray-200 dark:bg-slate-700"></span>
+
+            <!-- Brand -->
+            <div class="flex items-center gap-2 text-sm">
+              <span class="text-gray-500 dark:text-slate-400">Brand:</span>
+              <span class="font-semibold text-gray-900 dark:text-white">
+                {{ productData().brand.name }}
+              </span>
+            </div>
+          </div>
+
+          <!-- ===== Price Block ===== -->
+          <div class="mt-6 p-5 rounded-2xl">
+            @if (productData().priceAfterDiscount) {
+              <div class="flex items-baseline gap-3 flex-wrap">
+                <span
+                  class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white tracking-tight"
+                >
+                  {{
+                    productData().priceAfterDiscount | currency: 'EGP' : 'symbol-narrow' : '1.0-0'
+                  }}
+                </span>
+
+                <span class="text-lg text-gray-400 line-through">
+                  {{ productData().price | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+                </span>
+
+                <span class="px-2 py-0.5 rounded-md text-xs font-bold bg-red-500 text-white">
+                  Save
+                  {{
+                    ((productData().price - productData().priceAfterDiscount!) /
+                      productData().price) *
+                      100 | number: '1.0-0'
+                  }}%
+                </span>
+              </div>
+
+              <p
+                class="mt-2 text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1"
+              >
+                <i class="fa-solid fa-tag"></i>
+                You save
+                {{
+                  productData().price - productData().priceAfterDiscount!
+                    | currency: 'EGP' : 'symbol-narrow' : '1.0-0'
+                }}
+              </p>
+            } @else {
+              <span class="text-3xl md:text-4xl font-bold tracking-tight text-main-color">
+                {{ productData().price | currency: 'EGP' : 'symbol-narrow' : '1.0-0' }}
+              </span>
+            }
+          </div>
+
+          <!-- ===== Description ===== -->
+          <div class="mt-6">
+            <h3
+              class="text-sm font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-500 mb-2"
+            >
+              Description
+            </h3>
+            <p
+              class="text-sm md:text-base text-gray-600 dark:text-slate-300 leading-relaxed line-clamp-4"
+            >
+              {{ productData().description }}
+            </p>
+          </div>
+
+          @if (productData().availableColors?.length) {
+            <div class="mt-6">
+              <div class="flex items-center justify-between mb-3">
+                <h3
+                  class="text-sm font-semibold uppercase tracking-wider text-gray-400 dark:text-slate-500"
+                >
+                  Color
+                </h3>
+                <span class="text-xs text-gray-500 dark:text-slate-400">
+                  {{ productData().availableColors?.length }} options
+                </span>
+              </div>
+
+              <div class="flex gap-2.5 flex-wrap">
+                @for (color of productData().availableColors; track color) {
+                  <button
+                    type="button"
+                    class="relative w-9 h-9 rounded-full border-2 border-gray-200 dark:border-slate-700 hover:border-main-color hover:scale-110 active:scale-95"
+                    [style.background-color]="color"
+                    [title]="color"
+                    [attr.aria-label]="'Select color ' + color"
+                  ></button>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- ===== Divider ===== -->
+          <div class="my-6 border-t border-gray-100 dark:border-slate-800"></div>
+
+          <!-- ===== Actions Row ===== -->
+          <div class="flex items-stretch gap-3">
+            <!-- Quantity Selector -->
+            <div class="flex items-center gap-3">
+              <div
+                class="flex items-center rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden"
+              >
+                <button
+                  type="button"
+                  (click)="decrementQty()"
+                  [disabled]="quantity() <= 1"
+                  class="w-11 h-12 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-40"
+                  aria-label="Decrease quantity"
+                >
+                  <i class="fa-solid fa-minus text-xs"></i>
+                </button>
+
+                <span
+                  class="w-10 text-center font-semibold text-gray-900 dark:text-white select-none"
+                >
+                  {{ quantity() }}
+                </span>
+
+                <button
+                  type="button"
+                  (click)="incrementQty()"
+                  [disabled]="quantity() >= productData().quantity"
+                  class="w-11 h-12 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-40"
+                  aria-label="Increase quantity"
+                >
+                  <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Add to Cart -->
+            <button
+              type="button"
+              (click)="addToCartByQuantity(productData())"
+              [disabled]="addToCartDisabled() === productData()._id || productData().quantity === 0"
+              class="group/btn flex-1 h-12 flex items-center justify-center gap-2 rounded-xl bg-slate-900 text-white font-semibold text-sm md:text-base shadow-sm hover:bg-slate-800 hover:shadow-md active:scale-[0.98] disabled:opacity-60 disabled:hover:scale-100 disabled:hover:shadow-sm dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+            >
+              @if (addToCartDisabled() === productData()._id) {
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>Adding...</span>
+              } @else {
+                <i
+                  class="fa-solid fa-cart-shopping transition-transform duration-300 group-hover/btn:-translate-y-0.5"
+                ></i>
+                <span>Add to Cart</span>
+              }
+            </button>
+
+            <!-- Wishlist -->
+            <button
+              (click)="wishlistService.wishListToggle(productData())"
+              [disabled]="wishlistService.addToWishlistDisabled() === productData()._id"
+              type="button"
+              class="w-12 h-12 flex items-center justify-center rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-500 dark:text-slate-400 hover:text-red-500 hover:border-red-200 dark:hover:border-red-900/50"
+              aria-label="Add to wishlist"
+            >
+              @if (wishlistService.isInWishlist(productData()._id)) {
+                <i class="fa-solid fa-heart text-lg text-red-500 dark:text-red-600"></i>
+              } @else {
+                <i class="fa-regular fa-heart text-lg"></i>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  <!-- ================= Reviews ================= -->
+  <section class="container mx-auto px-4 mt-16 pb-10">
+    <!-- Section Header -->
+    <div class="mb-3 flex items-end justify-between gap-4">
+      <div>
+        <h2 class="text-3xl capitalize font-normal text-black dark:text-white mb-1">
+          What Customers Say
+        </h2>
+
+        <p class="mt-2 text-sm text-gray-500 dark:text-slate-400">
+          See what other customers think about this product
+        </p>
+      </div>
+      <!-- Product Rating Summary -->
+      @if (productData().ratingsAverage) {
+        <div
+          class="hidden sm:flex items-center gap-3 rounded-xl bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 px-4 py-3"
+        >
+          <div class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ productData().ratingsAverage }}
+          </div>
+
+          <div>
+            <div class="flex items-center gap-1 text-yellow-400">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <i class="fa-solid fa-star text-sm"></i>
+              }
+            </div>
+
+            <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
+              {{ productData().ratingsQuantity }} reviews
+            </p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Loading -->
+    @if (reviewsLoading()) {
+      <app-product-reviews-skeleton></app-product-reviews-skeleton>
+    }
+
+    <!-- Error -->
+    @else if (reviewsError()) {
+      <app-error-ui-component
+        [message]="reviewsErrorMessage()"
+        (retry)="loadProductReviews(productId())"
+      ></app-error-ui-component>
+    }
+
+    <!-- Reviews -->
+
+    @else if (reviews().length > 0) {
+      <div class="flex items-center px-3 justify-between mb-5 w-full">
+        <p class="text-sm text-gray-500 dark:text-slate-400">
+          Showing
+          <span class="font-semibold text-gray-800 dark:text-white">
+            {{ reviews().length }}
+          </span>
+          products
+        </p>
+        <p class="mt-4 text-sm text-gray-500 dark:text-slate-400">
+          Page<span class="font-semibold text-gray-800 dark:text-white">{{ currentPage() }}</span>
+          of
+          {{ numberOfPages() }}
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="reviews">
+        @for (review of reviews(); track review._id) {
+          <app-review-card [review]="review"></app-review-card>
+        }
+      </div>
+
+      <!-- Pagination -->
+      <app-pagination-component
+        [currentPage]="currentPage()"
+        [numberOfPages]="numberOfPages()"
+        (action)="goToPage($event)"
+      ></app-pagination-component>
+    }
+
+    <!-- Empty -->
+    @else {
+      <div
+        class="flex flex-col items-center justify-center py-12 rounded-2xl bg-gray-50 dark:bg-slate-900/50 border border-dashed border-gray-200 dark:border-slate-800"
+      >
+        <i class="fa-regular fa-comment-dots text-4xl text-gray-300 dark:text-slate-700"></i>
+
+        <h3 class="mt-4 font-semibold text-gray-700 dark:text-slate-300">No reviews yet</h3>
+
+        <p class="mt-1 text-sm text-gray-500 dark:text-slate-500">
+          Be the first to review this product.
+        </p>
+      </div>
+    }
+  </section>
+</section>

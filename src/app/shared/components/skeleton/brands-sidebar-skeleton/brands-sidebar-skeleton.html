@@ -1,0 +1,7 @@
+@for (item of [1, 2, 3, 4, 5, 6]; track $index) {
+  <div class="flex items-center gap-3 px-3 py-2">
+    <div class="skeleton h-4 w-4 shrink-0 rounded-full"></div>
+
+    <div class="skeleton h-4 rounded" [style.width.%]="50 + (($index * 7) % 45)"></div>
+  </div>
+}

@@ -1,0 +1,79 @@
+<div class="space-y-4">
+  @for (item of [1, 2, 3, 4]; track item) {
+    <article
+      class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+    >
+      <!-- ===== Card Header ===== -->
+      <div
+        class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 bg-gray-50/50 px-5 py-4 dark:border-slate-800 dark:bg-slate-800/30"
+      >
+        <div class="flex items-center gap-3">
+          <!-- Order Icon -->
+          <div class="skeleton h-9 w-9 shrink-0 rounded-lg"></div>
+
+          <!-- Order ID -->
+          <div>
+            <div class="skeleton h-2.5 w-14 rounded"></div>
+            <div class="skeleton mt-2 h-3.5 w-24 rounded"></div>
+          </div>
+
+          <!-- Divider -->
+          <span class="hidden h-8 w-px bg-gray-200 dark:bg-slate-700 sm:block"></span>
+
+          <!-- Date -->
+          <div>
+            <div class="skeleton h-2.5 w-14 rounded"></div>
+            <div class="skeleton mt-2 h-3.5 w-24 rounded"></div>
+          </div>
+        </div>
+
+        <!-- Status Badges -->
+        <div class="flex items-center gap-2">
+          <div class="skeleton h-6 w-16 rounded-full"></div>
+          <div class="skeleton h-6 w-20 rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- ===== Card Body ===== -->
+      <div class="flex flex-col items-start gap-5 p-5 sm:flex-row sm:items-center">
+        <!-- Product Thumbnails -->
+        <div class="flex shrink-0 items-center">
+          @for (image of [1, 2, 3]; track image) {
+            <div
+              class="skeleton h-14 w-14 rounded-xl border-2 border-white dark:border-slate-900"
+              [class.-ml-3]="image > 1"
+            ></div>
+          }
+        </div>
+
+        <!-- Order Summary -->
+        <div class="min-w-0 w-full flex-1">
+          <div class="skeleton h-4 w-24 rounded"></div>
+
+          <div class="skeleton mt-2 h-3 w-3/4 max-w-sm rounded"></div>
+
+          <div class="mt-3 flex items-center gap-3">
+            <div class="skeleton h-3 w-24 rounded"></div>
+          </div>
+        </div>
+
+        <!-- Total Price -->
+        <div class="shrink-0 sm:text-right">
+          <div class="skeleton h-2.5 w-12 rounded"></div>
+          <div class="skeleton mt-2 h-6 w-24 rounded"></div>
+        </div>
+      </div>
+
+      <!-- ===== Card Footer ===== -->
+      <div
+        class="flex items-center justify-between gap-3 border-t border-gray-100 px-5 py-3 dark:border-slate-800"
+      >
+        <!-- Location -->
+        <div class="skeleton hidden h-3 w-20 rounded sm:block"></div>
+
+        <!-- View Details -->
+        <div class="skeleton ml-auto h-4 w-24 rounded"></div>
+      </div>
+    </article>
+  }
+</div>

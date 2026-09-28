@@ -1,0 +1,40 @@
+@if (numberOfPages() > 1) {
+  <div class="mt-8 flex items-center justify-center gap-1.5">
+    <!-- Previous -->
+    <button
+      type="button"
+      (click)="prevPage()"
+      [disabled]="currentPage() === 1"
+      class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-600 dark:text-slate-300 hover:border-main-color hover:text-main-color hover:bg-main-color/5 dark:hover:bg-main-color/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 dark:disabled:hover:border-slate-700 disabled:hover:text-gray-600 dark:disabled:hover:text-slate-300 disabled:hover:bg-transparent"
+    >
+      <i class="fa-solid fa-chevron-left text-xs"></i>
+    </button>
+
+    <!-- Pages -->
+    @for (page of pages; track page) {
+      <button
+        type="button"
+        (click)="goToPage(page)"
+        [disabled]="page === currentPage()"
+        [class]="
+          page === currentPage()
+            ? 'bg-main-color border-main-color text-white shadow-sm cursor-default'
+            : 'bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:border-main-color hover:text-main-color hover:bg-main-color/5 dark:hover:bg-main-color/10'
+        "
+        class="h-10 min-w-10 rounded-xl border px-3 text-sm font-medium disabled:cursor-not-allowed"
+      >
+        {{ page }}
+      </button>
+    }
+
+    <!-- Next -->
+    <button
+      type="button"
+      (click)="nextPage()"
+      [disabled]="currentPage() === numberOfPages()"
+      class="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-600 dark:text-slate-300 hover:border-main-color hover:text-main-color hover:bg-main-color/5 dark:hover:bg-main-color/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-gray-200 dark:disabled:hover:border-slate-700 disabled:hover:text-gray-600 dark:disabled:hover:text-slate-300 disabled:hover:bg-transparent"
+    >
+      <i class="fa-solid fa-chevron-right text-xs"></i>
+    </button>
+  </div>
+}

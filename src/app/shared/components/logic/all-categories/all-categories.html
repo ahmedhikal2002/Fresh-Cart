@@ -1,0 +1,49 @@
+<section class="px-5 py-3 shadow-transparent md:shadow-xl overflow-hidden">
+  <h3 class="text-3xl capitalize font-normal text-black dark:text-white mb-5">
+    shop popular categories
+  </h3>
+  @if (loading()) {
+    <app-categories-skeleton></app-categories-skeleton>
+  } @else if (error() && !loading()) {
+    <app-error-ui-component
+      (retry)="loadCategories()"
+      [message]="errorMessage()"
+    ></app-error-ui-component>
+  } @else {
+    <owl-carousel-o [options]="customOptions">
+      @for (slide of allCategory(); track slide._id) {
+        <ng-template carouselSlide [id]="slide._id">
+          <a
+            [routerLink]="['/category', slide._id]"
+            class="group block relative mx-2 overflow-hidden rounded-xl cursor-pointer"
+          >
+            <!-- Image -->
+            <div class="overflow-hidden rounded-xl">
+              <img
+                [src]="slide.image"
+                [alt]="slide.name || slide.slug"
+                [title]="slide.name"
+                loading="lazy"
+                class="w-full h-52 sm:h-60 object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+
+            <!-- Gradient Overlay -->
+            <div
+              class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent rounded-xl"
+            ></div>
+
+            <!-- Category Name -->
+            <div class="absolute bottom-0 left-0 right-0 p-4 text-center">
+              <h3
+                class="text-sm sm:text-base font-bold text-white transition-colors group-hover:text-main-color truncate"
+              >
+                {{ slide.name || slide.slug }}
+              </h3>
+            </div>
+          </a>
+        </ng-template>
+      }
+    </owl-carousel-o>
+  }
+</section>

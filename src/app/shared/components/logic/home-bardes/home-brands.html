@@ -1,0 +1,43 @@
+<section class="px-5 py-8 overflow-hidden">
+  <!-- Header -->
+  <div class="mb-5 flex items-end justify-between gap-4">
+    <div>
+      <h2 class="text-3xl sm:text-4xl text-gray-900 dark:text-white">Our Brands</h2>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <app-home-brands-skeleton></app-home-brands-skeleton>
+  }
+
+  <!-- Error -->
+  @else if (error()) {
+    <app-error-ui-component
+      [message]="errorMessage()"
+      (retry)="loadBrands()"
+    ></app-error-ui-component>
+  }
+
+  <!-- Brands Carousel -->
+  @else if (allBrands().length > 0) {
+    <owl-carousel-o [options]="customOptions">
+      @for (brand of allBrands(); track brand._id) {
+        <ng-template carouselSlide [id]="brand._id">
+          <a
+            [routerLink]="['/brand', brand._id]"
+            class="group mx-2 flex h-36 items-center justify-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-main-color/40 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-main-color/40 dark:hover:shadow-lg dark:hover:shadow-black/20"
+          >
+            <img
+              [src]="brand.image"
+              [alt]="brand.name || brand.slug"
+              [title]="brand.name"
+              loading="lazy"
+              class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+          </a>
+        </ng-template>
+      }
+    </owl-carousel-o>
+  }
+</section>

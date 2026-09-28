@@ -1,1 +1,158 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==================== External ==================== */
+@use 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@use 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default' as owl-theme;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ==================== Tailwind v4 ==================== */
+@import 'tailwindcss';
+
+/* Custom variant for dark mode (class-based) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==================== Theme ==================== */
+@theme {
+  /* Colors */
+  --color-main-color: #10b981;
+
+  /* Fonts */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Custom Animations */
+  --animate-bounce-slow: bounce-slow 2s infinite;
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+  --text-2xs: 0.625rem; /* 10px */
+  --text-2xs--line-height: 0.875rem;
+
+  /* Border radius */
+  --radius-base: 0.5rem;
+
+  @keyframes bounce-slow {
+    0%,
+    100% {
+      transform: translateY(-5%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
+
+/* ==================== Base Layer ==================== */
+@layer base {
+  html {
+    scroll-padding-top: 100px;
+    scroll-behavior: smooth;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-gray-100 text-gray-900 dark:bg-slate-950 dark:text-slate-100;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  button,
+  [role='button'] {
+    cursor: pointer;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      transform 200ms ease,
+      opacity 200ms ease;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  a {
+    transition:
+      color 200ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease;
+  }
+
+  input,
+  textarea,
+  select {
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  img {
+    transition:
+      transform 300ms ease,
+      opacity 300ms ease;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Anchor scroll offset */
+  #reviews {
+    scroll-margin-top: 100px;
+  }
+}
+
+/* ==================== Components Layer ==================== */
+@layer components {
+  /* Skeleton (shimmer effect) */
+  .skeleton {
+    background: linear-gradient(90deg, #d1d5db 0%, #e5e7eb 50%, #d1d5db 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  .text-heading {
+    @apply text-gray-900 dark:text-white font-semibold;
+  }
+
+  .text-body {
+    @apply text-gray-700 dark:text-slate-300;
+  }
+
+  .rounded-base {
+    @apply rounded-lg;
+  }
+  /* Dark mode skeleton */
+  @variant dark {
+    .skeleton {
+      background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s ease-in-out infinite;
+    }
+  }
+
+  /* Active link */
+  .active {
+    @apply text-main-color;
+  }
+}

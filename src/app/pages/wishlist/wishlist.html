@@ -1,0 +1,26 @@
+<section class="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+  <div class="max-w-362.5 mx-auto">
+    <!-- Header -->
+    <div class="mb-3">
+      <h1 class="text-3xl sm:text-4xl text-gray-900 dark:text-white">WishList</h1>
+    </div>
+    @if (loading()) {
+      <app-products-skeleton [length]="8"></app-products-skeleton>
+    } @else if (error()) {
+      <app-error-ui-component
+        [message]="errorMsg()"
+        (retry)="loadWishList()"
+      ></app-error-ui-component>
+    } @else {
+      @if (wishlistService.wishList().length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          @for (item of wishlistService.wishList(); track item._id) {
+            <app-card-product [product]="item"></app-card-product>
+          }
+        </div>
+      } @else {
+        <app-empty-state-component title="Your WishList is Empty"></app-empty-state-component>
+      }
+    }
+  </div>
+</section>

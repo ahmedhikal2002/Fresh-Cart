@@ -1,0 +1,19 @@
+<section class="px-5 py-6">
+  <h3 class="text-3xl capitalize font-normal text-black dark:text-white mb-5">
+    shop popular products
+  </h3>
+  @if (loading()) {
+    <app-products-skeleton [length]="12"></app-products-skeleton>
+  } @else if (error() && !loading()) {
+    <app-error-ui-component
+      (retry)="loadHomeProduct()"
+      [message]="errorMessage()"
+    ></app-error-ui-component>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      @for (product of allProducts(); track product._id) {
+        <app-card-product [product]="product"></app-card-product>
+      }
+    </div>
+  }
+</section>

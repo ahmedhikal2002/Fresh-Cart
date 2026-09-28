@@ -1,0 +1,281 @@
+<section class="min-h-screen max-w-362.5 mx-auto py-10 px-4">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl sm:text-4xl text-gray-900 dark:text-white">Checkout</h1>
+
+    <p class="mt-2 text-gray-500 dark:text-slate-400">Complete your order details</p>
+  </div>
+  <div class="max-w-4xl mx-auto">
+    @if (loadingCart()) {
+      <app-checkout-skeleton></app-checkout-skeleton>
+    } @else if (errorCart()) {
+      <app-error-ui-component
+        [message]="errMsgCart()"
+        (retry)="loadCart()"
+      ></app-error-ui-component>
+    } @else {
+      <form
+        [formGroup]="checkoutForm"
+        (ngSubmit)="createPayment()"
+        class="grid grid-cols-1 lg:grid-cols-3 gap-6"
+      >
+        @if (errorCashOrder()) {
+          <div
+            class="mb-6 p-4 rounded-xl bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-800"
+          >
+            <p class="text-red-600 dark:text-red-400">
+              {{ cashOrderMessageError() }}
+            </p>
+          </div>
+        }
+        @if (errorOnlineOrder()) {
+          <div
+            class="mb-6 p-4 rounded-xl bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-800"
+          >
+            <p class="text-red-600 dark:text-red-400">
+              {{ onlineOrderMessageError() }}
+            </p>
+          </div>
+        }
+        <div
+          class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-lg p-6"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-6">
+            Shipping Information
+          </h2>
+
+          <div class="space-y-5">
+            <!-- Address -->
+
+            <div>
+              <label
+                for="details"
+                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Address
+              </label>
+
+              <textarea
+                id="details"
+                formControlName="details"
+                rows="4"
+                placeholder="Enter your full address"
+                [class.border-red-500]="details?.invalid && details?.touched"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              ></textarea>
+
+              @if (details?.touched && details?.hasError('required')) {
+                <p class="mt-1 text-sm text-red-500">Address is required</p>
+              } @else if (details?.hasError('noWhitespace')) {
+                <p class="mt-1.5 text-sm text-red-500">Address cannot be empty spaces</p>
+              }
+            </div>
+
+            <!-- Phone -->
+
+            <div>
+              <label
+                for="phone"
+                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Phone Number
+              </label>
+
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                placeholder="01000000000"
+                [class.border-red-500]="phone?.invalid && phone?.touched"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              />
+
+              @if (phone?.touched && phone?.hasError('required')) {
+                <p class="mt-1 text-sm text-red-500">Phone number is required</p>
+              } @else if (phone?.touched && phone?.hasError('pattern')) {
+                <p class="mt-1 text-sm text-red-500">Please enter a valid Egyptian phone number</p>
+              }
+            </div>
+
+            <!-- City -->
+
+            <div>
+              <label
+                for="city"
+                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                City
+              </label>
+
+              <input
+                id="city"
+                type="text"
+                formControlName="city"
+                placeholder="Cairo"
+                [class.border-red-500]="city?.invalid && city?.touched"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              />
+
+              @if (city?.touched && city?.hasError('required')) {
+                <p class="mt-1 text-sm text-red-500">City is required</p>
+              } @else if (city?.hasError('noWhitespace')) {
+                <p class="mt-1.5 text-sm text-red-500">city cannot be empty spaces</p>
+              }
+            </div>
+
+            <!-- Postal Code -->
+
+            <div>
+              <label
+                for="postalCode"
+                class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Postal Code
+              </label>
+
+              <input
+                id="postalCode"
+                type="text"
+                formControlName="postalCode"
+                placeholder="12345"
+                [class.border-red-500]="postalCode?.invalid && postalCode?.touched"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              />
+
+              @if (postalCode?.touched && postalCode?.hasError('required')) {
+                <p class="mt-1 text-sm text-red-500">Postal code is required</p>
+              }
+              @if (postalCode?.hasError('pattern')) {
+                <p class="mt-1.5 text-sm text-red-500">invalid postal code</p>
+              }
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-5">Payment Method</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Cash -->
+
+              <label
+                class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-slate-700 cursor-pointer hover:border-main-color transition"
+              >
+                <input
+                  type="radio"
+                  formControlName="paymentMethod"
+                  value="cash"
+                  class="w-4 h-4 accent-main-color"
+                />
+
+                <div
+                  class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center"
+                >
+                  <i
+                    class="fa-solid fa-money-bill-wave text-green-600 dark:text-green-400 text-xl"
+                  ></i>
+                </div>
+
+                <div>
+                  <h3 class="font-semibold text-gray-800 dark:text-white">Cash on Delivery</h3>
+
+                  <p class="text-sm text-gray-500 dark:text-slate-400">
+                    Pay when your order arrives
+                  </p>
+                </div>
+              </label>
+
+              <!-- Online Payment -->
+
+              <label
+                class="flex items-center gap-4 p-4 rounded-xl border border-gray-200 dark:border-slate-700 cursor-pointer hover:border-main-color transition"
+              >
+                <input
+                  type="radio"
+                  formControlName="paymentMethod"
+                  value="visa"
+                  class="w-4 h-4 accent-main-color"
+                />
+
+                <div
+                  class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-credit-card text-blue-600 dark:text-blue-400 text-xl"></i>
+                </div>
+
+                <div>
+                  <h3 class="font-semibold text-gray-800 dark:text-white">Online Payment</h3>
+
+                  <p class="text-sm text-gray-500 dark:text-slate-400">
+                    Pay securely with your card
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+
+          <button
+            type="submit"
+            [disabled]="processingOrder()"
+            class="w-full mt-8 py-3.5 rounded-xl bg-main-color text-white font-semibold hover:opacity-90 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+          >
+            @if (processingOrder()) {
+              <span>
+                Processing
+
+                <i class="fa-solid fa-spinner fa-spin ml-2"></i>
+              </span>
+            } @else if (paymentMethod?.value === 'cash') {
+              <span>
+                Place Order
+
+                <i class="fa-solid fa-check ml-2"></i>
+              </span>
+            } @else {
+              <span>
+                Pay Now
+
+                <i class="fa-solid fa-credit-card ml-2"></i>
+              </span>
+            }
+          </button>
+        </div>
+
+        <div
+          class="h-fit bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-lg p-6"
+        >
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-5">Order Summary</h2>
+
+          <div class="space-y-4">
+            <div class="flex justify-between text-gray-600 dark:text-slate-400">
+              <span>Subtotal</span>
+
+              <span>
+                {{ totalPrice() | currency: 'EGP' : 'symbol-narrow' }}
+              </span>
+            </div>
+
+            <div class="flex justify-between text-gray-600 dark:text-slate-400">
+              <span>Shipping</span>
+
+              <p class="text-xs ml-4.25 dark:text-slate-400 text-gray-400">
+                Shipping & tax will be calculated at the next step
+              </p>
+            </div>
+
+            <div class="border-t border-gray-200 dark:border-slate-700 pt-4">
+              <div class="flex justify-between">
+                <span class="font-semibold text-gray-800 dark:text-white"> Total </span>
+
+                <span class="text-xl font-bold text-main-color">
+                  {{ totalPrice() | currency: 'EGP' : 'symbol-narrow' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    }
+  </div>
+</section>

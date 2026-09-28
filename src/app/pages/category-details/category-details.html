@@ -1,0 +1,128 @@
+<section class="rounded-2xl p-4 sm:p-6 lg:p-8 text-slate-900 dark:text-white shadow-sm">
+  <div class="max-w-362.5 mx-auto">
+    <!-- Header -->
+    <div class="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="mb-1 text-sm font-medium text-main-color">Categories</p>
+        <h2 class="text-2xl sm:text-3xl font-semibold">
+          {{ categoryDetails().name }}
+        </h2>
+
+        @if (categoriesName().length > 0) {
+          <div class="mt-3 flex flex-wrap gap-2">
+            @for (name of categoriesName(); track name) {
+              <span
+                class="rounded-full bg-main-color/10 px-3 py-1 text-sm font-medium text-main-color"
+              >
+                {{ name }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6 lg:gap-8">
+      <!-- Sidebar -->
+      <aside
+        class="h-fit rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden"
+      >
+        <div class="border-b border-slate-200 dark:border-slate-700 px-4 py-4">
+          <h3 class="font-semibold text-lg">All Categories</h3>
+
+          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Browse products by category</p>
+        </div>
+
+        <div class="p-2">
+          <div class="space-y-1">
+            <app-categories-side-bar
+              (action)="categoryFilter($event)"
+              (allCategoryAction)="setAllCategories($event)"
+              [categoriesDetailsComponent]="true"
+            ></app-categories-side-bar>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Products -->
+      <div class="min-w-0">
+        @if (productLoading()) {
+          <app-all-products-skeleton [cardsCount]="10"></app-all-products-skeleton>
+        } @else if (productErr()) {
+          <app-error-ui-component
+            [message]="productErrMsg()"
+            (retry)="loadAllProduct()"
+          ></app-error-ui-component>
+        } @else {
+          @if (allProducts().length > 0) {
+            <!-- Products -->
+            <div class="min-w-0">
+              @if (productLoading()) {
+                <app-all-products-skeleton [cardsCount]="10"></app-all-products-skeleton>
+              } @else if (productErr()) {
+                <app-error-ui-component
+                  [message]="productErrMsg()"
+                  (retry)="loadAllProduct()"
+                ></app-error-ui-component>
+              } @else {
+                @if (allProducts().length > 0) {
+                  <!-- Results Info -->
+                  @if (allProducts().length > 0) {
+                    <div class="flex items-center justify-between mb-5 w-full">
+                      <p class="text-sm text-gray-500 dark:text-slate-400">
+                        Showing
+                        <span class="font-semibold text-gray-800 dark:text-white">
+                          {{ allProducts().length }}
+                        </span>
+                        products
+                      </p>
+                      <p class="mt-4 text-sm text-gray-500 dark:text-slate-400">
+                        Page<span class="font-semibold text-gray-800 dark:text-white">{{
+                          productParams().page
+                        }}</span>
+                        of {{ numberOfPages() }}
+                      </p>
+                    </div>
+                  }
+                  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    @for (item of allProducts(); track item.id) {
+                      <app-card-product [product]="item"></app-card-product>
+                    }
+                  </div>
+                } @else {
+                  <div
+                    class="text-center py-16 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800"
+                  >
+                    <app-empty-state-component
+                      title="No products found in this category."
+                    ></app-empty-state-component>
+                  </div>
+                }
+              }
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              @for (item of allProducts(); track item.id) {
+                <app-card-product [product]="item"></app-card-product>
+              }
+            </div>
+          } @else {
+            <div
+              class="text-center py-16 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800"
+            >
+              <app-empty-state-component
+                title="No products found in this category."
+              ></app-empty-state-component>
+            </div>
+          }
+        }
+      </div>
+    </div>
+    <!-- Pagination -->
+    <app-pagination-component
+      [currentPage]="productParams().page ?? 1"
+      [numberOfPages]="numberOfPages()"
+      (action)="changePage($event)"
+    ></app-pagination-component>
+  </div>
+</section>

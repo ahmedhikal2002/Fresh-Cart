@@ -1,0 +1,9 @@
+<div class="py-10 text-center">
+  <i class="fa-solid fa-circle-exclamation text-3xl text-red-500 mb-3"></i>
+
+  <p class="text-gray-600 dark:text-gray-400">{{ message() }}</p>
+
+  <button (click)="retry.emit()" class="mt-4 px-5 py-2 rounded-lg bg-main-color text-white">
+    Try Again
+  </button>
+</div>

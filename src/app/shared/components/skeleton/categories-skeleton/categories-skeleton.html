@@ -1,0 +1,17 @@
+<section class="overflow-hidden">
+  <owl-carousel-o [options]="customOptions">
+    @for (item of [0, 1, 2, 3, 4, 5]; track item) {
+      <ng-template carouselSlide>
+        <div class="relative mr-1 px-1">
+          <!-- Image -->
+          <div class="skeleton h-60 w-full rounded-[5px]"></div>
+
+          <!-- Category Name -->
+          <div
+            class="skeleton absolute bottom-6 left-1/2 h-5 w-24 -translate-x-1/2 rounded-md"
+          ></div>
+        </div>
+      </ng-template>
+    }
+  </owl-carousel-o>
+</section>

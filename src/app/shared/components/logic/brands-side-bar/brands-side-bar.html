@@ -1,0 +1,122 @@
+<div>
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+      Brands
+    </h3>
+
+    @if (hasSelectedBrand()) {
+      <button
+        type="button"
+        (click)="clearBrands()"
+        class="text-xs font-medium text-main-color hover:underline transition"
+      >
+        Clear
+      </button>
+    }
+  </div>
+
+  <!-- Search brands -->
+  <div class="relative mb-3">
+    <i
+      class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400"
+    ></i>
+    <input
+      type="text"
+      [value]="searchBrand()"
+      (input)="searchBrands($event)"
+      placeholder="Search brands..."
+      class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-9 pr-3 text-sm text-gray-700 outline-none transition focus:border-main-color focus:bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-main-color dark:focus:bg-slate-800"
+    />
+  </div>
+
+  <!-- Content -->
+  <div class="space-y-1 max-h-64 overflow-y-auto pr-1">
+    <!-- ===== Loading ===== -->
+    @if (allBrandsLoading()) {
+      <app-brands-sidebar-skeleton></app-brands-sidebar-skeleton>
+    }
+
+    <!-- ===== Error ===== -->
+    @else if (allBrandsError()) {
+      <app-error-ui-component
+        [message]="allBrandsErrMsg()"
+        (retry)="loadAllBrands()"
+      ></app-error-ui-component>
+    }
+
+    <!-- ===== Brands ===== -->
+    @else {
+      @if (brandsDetailsComponent()) {
+        <label
+          class="group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 transition-colors duration-200"
+          [class.bg-main-color/5]="isAllSelected()"
+          [class.dark:bg-main-color/10]="isAllSelected()"
+          [class.hover:bg-gray-100]="!isAllSelected()"
+          [class.dark:hover:bg-slate-800]="!isAllSelected()"
+        >
+          <input
+            type="radio"
+            name="brand"
+            [checked]="isAllSelected()"
+            (change)="filterByBrand($event, '')"
+            class="h-4 w-4 cursor-pointer accent-main-color"
+          />
+
+          <span
+            class="text-sm font-medium transition-colors"
+            [class.text-main-color]="isAllSelected()"
+            [class.text-gray-700]="!isAllSelected()"
+            [class.dark:text-slate-300]="!isAllSelected()"
+          >
+            All Brands
+          </span>
+        </label>
+      }
+
+      <!-- Individual Brands -->
+      @for (brand of filteredBrands(); track brand._id) {
+        <label
+          class="group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 transition-colors duration-200"
+          [class.bg-main-color/5]="isSelected(brand._id)"
+          [class.dark:bg-main-color/10]="isSelected(brand._id)"
+          [class.hover:bg-gray-100]="!isSelected(brand._id)"
+          [class.dark:hover:bg-slate-800]="!isSelected(brand._id)"
+        >
+          <input
+            type="radio"
+            name="brand"
+            [checked]="isSelected(brand._id)"
+            (change)="filterByBrand($event, brand._id)"
+            class="h-4 w-4 cursor-pointer accent-main-color"
+          />
+
+          <span
+            class="text-sm font-medium transition-colors"
+            [class.text-main-color]="isSelected(brand._id)"
+            [class.text-gray-700]="!isSelected(brand._id)"
+            [class.dark:text-slate-300]="!isSelected(brand._id)"
+          >
+            {{ brand.name }}
+          </span>
+        </label>
+      }
+
+      <!-- Empty (مفيش نتايج بحث) -->
+      @if (filteredBrands().length === 0) {
+        <div class="px-3 py-6 text-center">
+          <i class="fa-solid fa-magnifying-glass text-2xl text-gray-300 dark:text-slate-600"></i>
+          <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">
+            No brands match "{{ searchBrand() }}"
+          </p>
+          <button
+            type="button"
+            (click)="searchBrand.set('')"
+            class="mt-2 text-xs font-medium text-main-color hover:underline"
+          >
+            Clear search
+          </button>
+        </div>
+      }
+    }
+  </div>
+</div>

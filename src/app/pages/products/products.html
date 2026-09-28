@@ -1,0 +1,202 @@
+<section class="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-362.5 mx-auto">
+    <!-- ================= Header ================= -->
+    <div class="mb-8">
+      <h1 class="text-3xl sm:text-4xl text-gray-900 dark:text-white">All Products</h1>
+      <p class="mt-2 text-gray-500 dark:text-slate-400">
+        Discover our latest products and find what you need.
+      </p>
+    </div>
+
+    <!-- ================= Layout: Sidebar + Content ================= -->
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- ================= Sidebar Filters ================= -->
+      <aside class="lg:w-72 lg:shrink-0">
+        <div
+          class="lg:sticky lg:top-6 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-6"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h2
+                class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide"
+              >
+                Filters
+              </h2>
+              @if (hasActiveFilters()) {
+                <button
+                  type="button"
+                  (click)="clearAllFilters()"
+                  class="text-xs font-medium text-main-color hover:underline flex items-center gap-1 transition"
+                >
+                  <i class="fa-solid fa-xmark text-2xs"></i>
+                  Clear all
+                </button>
+              }
+            </div>
+            <div class="border-t border-gray-200 dark:border-slate-800"></div>
+          </div>
+
+          <!-- Price -->
+          <div>
+            <h3
+              class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-3"
+            >
+              Price
+            </h3>
+            <div class="flex items-center gap-2">
+              <input
+                type="number"
+                placeholder="Min"
+                [value]="minPrice() ?? ''"
+                (input)="filterByPrice('min', $any($event.target).value)"
+                class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              />
+              <span class="text-gray-400">–</span>
+              <input
+                type="number"
+                placeholder="Max"
+                [value]="maxPrice() ?? ''"
+                (input)="filterByPrice('max', $any($event.target).value)"
+                class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              />
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-slate-800"></div>
+
+          <!-- Categories -->
+          <app-categories-side-bar (action)="filterByCategory($event)"></app-categories-side-bar>
+
+          <!-- Divider -->
+          <div class="border-t border-gray-200 dark:border-slate-800"></div>
+
+          <!-- Brands -->
+          <app-brands-side-bar (action)="filterByBrand($event)"></app-brands-side-bar>
+        </div>
+      </aside>
+
+      <!-- ================= Main Content ================= -->
+      <div class="flex-1 min-w-0">
+        <!-- Search + Sort Bar -->
+        <div
+          class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl p-4 mb-6 shadow-sm"
+        >
+          <!-- Real content -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Search -->
+            <div class="relative flex-1">
+              <i
+                class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              ></i>
+              <input
+                type="text"
+                [value]="keyword()"
+                (input)="filterBySearch($event)"
+                placeholder="Search products..."
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+              />
+            </div>
+
+            <!-- Sort -->
+            <select
+              (change)="sortBy($event)"
+              class="sm:w-52 px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-slate-200 outline-none focus:ring-2 focus:ring-main-color/30 focus:border-main-color transition"
+            >
+              <option value="">Sort by</option>
+              <option value="price">Price: Low to High</option>
+              <option value="-price">Price: High to Low</option>
+              <option value="-ratingsAverage">Top Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Result info -->
+
+        @if (allProductsLoading()) {
+          <app-all-products-skeleton [cardsCount]="10"></app-all-products-skeleton>
+        } @else if (allProductsError()) {
+          <app-error-ui-component
+            [message]="allProductsErrorMessage()"
+            (retry)="loadAllProducts(filters())"
+          />
+        }
+
+        <!-- Products -->
+        @else {
+          @if (allProducts().length > 0) {
+            <div class="flex items-center justify-between mb-5">
+              <p class="text-sm text-gray-500 dark:text-slate-400">
+                Showing
+                <span class="font-semibold text-gray-800 dark:text-white">
+                  {{ allProducts().length }}
+                </span>
+                products
+              </p>
+              <p class="text-sm text-gray-500 dark:text-slate-400">
+                Page
+                <span class="font-semibold text-gray-800 dark:text-white">{{
+                  filters().page
+                }}</span>
+                of
+                {{ numberOfPages() }}
+              </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              @for (product of allProducts(); track product._id) {
+                <app-card-product [product]="product"></app-card-product>
+              }
+            </div>
+
+            <!-- Pagination -->
+            <app-pagination-component
+              [currentPage]="filters().page ?? 1"
+              [numberOfPages]="numberOfPages()"
+              (action)="goToPage($event)"
+            ></app-pagination-component>
+          } @else {
+            <!-- Empty -->
+            <div
+              class="text-center py-16 px-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800"
+            >
+              <app-empty-state-component title="No products found"></app-empty-state-component>
+
+              <!-- Description -->
+              <p class="text-gray-500 dark:text-slate-400 mt-2 max-w-md mx-auto">
+                @if (hasActiveFilters()) {
+                  We couldn't find any products matching your current filters. Try adjusting your
+                  search or clearing the filters.
+                } @else {
+                  There are no products available right now. Please check back later.
+                }
+              </p>
+
+              <!-- Actions -->
+              <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+                @if (hasActiveFilters()) {
+                  <button
+                    type="button"
+                    (click)="clearAllFilters()"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-main-color text-white font-semibold hover:opacity-90 active:scale-[0.98] transition"
+                  >
+                    <i class="fa-solid fa-rotate-left text-sm"></i>
+                    Reset filters
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    (click)="loadAllProducts(filters())"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-main-color text-white font-semibold hover:opacity-90 active:scale-[0.98] transition"
+                  >
+                    <i class="fa-solid fa-rotate-right text-sm"></i>
+                    Refresh
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</section>

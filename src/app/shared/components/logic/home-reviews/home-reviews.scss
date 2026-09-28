@@ -1,0 +1,19 @@
+::ng-deep .owl-carousel {
+  position: relative;
+}
+
+::ng-deep .owl-nav {
+  position: absolute !important;
+  top: -65px !important;
+  right: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  gap: 8px !important;
+}
+
+::ng-deep .owl-nav button {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+  border-radius: 9999px !important;
+}

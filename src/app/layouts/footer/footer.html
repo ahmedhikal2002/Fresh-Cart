@@ -1,0 +1,124 @@
+<footer class="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800">
+  <div class="container mx-auto px-6 pt-12 pb-6">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center">
+          <a routerLink="/home">
+            <img src="/icons/freshcart-icon-mono.svg" loading="lazy" class="w-15 h-15" alt="logo" />
+          </a>
+          <h3 class="text-main-color font-bold text-4xl">
+            Fresh<span class="text-gray-800 dark:text-white">Cart</span>
+          </h3>
+        </div>
+
+        <p class="leading-7 text-gray-600 dark:text-gray-300">
+          Find the best products at the best prices with fast delivery and secure payment methods.
+        </p>
+
+        <div class="mt-6 flex gap-4 text-2xl text-gray-600 dark:text-gray-300">
+          <a href="#" class="transition hover:scale-110 hover:text-main-color">
+            <i class="fab fa-facebook"></i>
+          </a>
+
+          <a href="#" class="transition hover:scale-110 hover:text-main-color">
+            <i class="fab fa-instagram"></i>
+          </a>
+
+          <a href="#" class="transition hover:scale-110 hover:text-main-color">
+            <i class="fab fa-twitter"></i>
+          </a>
+
+          <a href="#" class="transition hover:scale-110 hover:text-main-color">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-200">Quick Links</h3>
+
+        <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+          <li>
+            <a routerLink="/home" class="hover:text-main-color"> Home </a>
+          </li>
+
+          <li>
+            <a routerLink="/products" class="hover:text-main-color"> Products </a>
+          </li>
+
+          <li>
+            <a routerLink="/cart" class="hover:text-main-color"> Cart </a>
+          </li>
+
+          <li>
+            <a routerLink="/wishlist" class="hover:text-main-color"> Wishlist </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <h3 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-200">Support</h3>
+
+        <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+          <li>
+            <a href="#" class="hover:text-main-color"> Contact Us </a>
+          </li>
+
+          <li>
+            <a href="#" class="hover:text-main-color"> Privacy Policy </a>
+          </li>
+
+          <li>
+            <a href="#" class="hover:text-main-color"> Terms & Conditions </a>
+          </li>
+
+          <li>
+            <a href="#" class="hover:text-main-color"> FAQ </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h3 class="mb-4 text-xl font-semibold text-gray-800 dark:text-gray-200">Newsletter</h3>
+
+        <p class="mb-4 text-gray-600 dark:text-gray-300">
+          Subscribe to get special offers and updates.
+        </p>
+
+        <form class="flex flex-col gap-3">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-main-color dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400"
+          />
+
+          <button
+            class="rounded-lg bg-main-color px-4 py-3 font-medium text-white transition hover:bg-main-color/95"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Payment -->
+
+    <div
+      class="mt-5 flex flex-col items-center justify-between gap-4 border-t border-gray-200 pt-6 dark:border-gray-800 md:flex-row"
+    >
+      <div class="flex gap-4 text-3xl text-gray-500 dark:text-gray-400">
+        <img src="/images/mastercard.webp" loading="lazy" width="60" />
+        <img src="/images/American-Express-Color.png" loading="lazy" width="60" />
+        <img src="/images/paypal.png" loading="lazy" width="60" />
+      </div>
+
+      <p class="text-center text-gray-500 dark:text-gray-400">
+        © {{ currentYear }} Fresh Cart. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

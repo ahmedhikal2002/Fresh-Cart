@@ -1,0 +1,32 @@
+<section class="px-5 py-3 overflow-hidden">
+  <!-- Header -->
+  <h2 class="text-3xl capitalize font-normal text-black dark:text-white mb-5">
+    What Our Customers Say
+  </h2>
+
+  <div class="max-w-7xl mx-auto">
+    <!-- Loading Skeleton -->
+    @if (loading()) {
+      <app-home-reviews-skeleton></app-home-reviews-skeleton>
+    }
+
+    <!-- Error -->
+    @else if (error()) {
+      <app-error-ui-component
+        [message]="errorMessage()"
+        (retry)="loadReviews()"
+      ></app-error-ui-component>
+    }
+
+    <!-- Reviews Carousel -->
+    @else if (homeReviews().length > 0) {
+      <owl-carousel-o [options]="customOptions">
+        @for (review of homeReviews(); track review._id) {
+          <ng-template carouselSlide [id]="review._id">
+            <app-review-card [review]="review"></app-review-card>
+          </ng-template>
+        }
+      </owl-carousel-o>
+    }
+  </div>
+</section>

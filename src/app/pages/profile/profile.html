@@ -1,0 +1,100 @@
+@if (authService.currentUser()) {
+  <section class="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl">
+      <!-- ==================== Profile Header ==================== -->
+      <div
+        class="mb-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900"
+      >
+        <!-- Header Background -->
+        <div class="bg-main-color/10 px-5 py-7 dark:bg-main-color/5 sm:px-6 sm:py-8">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+            <!-- Avatar -->
+            <div
+              class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-main-color/20 bg-main-color/10 text-2xl font-semibold text-main-color dark:bg-main-color/20"
+            >
+              {{ user().userName }}
+            </div>
+
+            <!-- User Info -->
+            <div class="min-w-0">
+              <p class="mb-1 text-sm font-medium text-gray-500 dark:text-slate-400">My Profile</p>
+
+              <h1 class="truncate text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
+                {{ user().name }}
+              </h1>
+
+              <p class="mt-1 truncate text-sm text-gray-500 dark:text-slate-400">
+                {{ user().email }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== Addresses ==================== -->
+      <app-user-addresses></app-user-addresses>
+
+      <!-- ==================== Profile Actions ==================== -->
+      <div
+        class="mt-4 flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <!-- Edit / Password Actions -->
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <!-- Edit Profile -->
+          <button
+            type="button"
+            (click)="toggleEditProfile()"
+            class="inline-flex items-center justify-center gap-2 rounded-lg border border-main-color/30 bg-main-color/5 px-4 py-2.5 text-sm font-medium text-main-color hover:border-main-color/50 hover:bg-main-color/10 focus:outline-none focus:ring-2 focus:ring-main-color/20 dark:border-main-color/30 dark:bg-main-color/10 dark:hover:bg-main-color/20"
+          >
+            @if (editProfile()) {
+              <i class="fa-solid fa-xmark"></i>
+              <span>Cancel</span>
+            } @else {
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span>Edit Profile</span>
+            }
+          </button>
+
+          <!-- Change Password -->
+          <button
+            type="button"
+            (click)="toggleChangePassword()"
+            class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          >
+            @if (changePassword()) {
+              <i class="fa-solid fa-xmark"></i>
+              <span>Cancel</span>
+            } @else {
+              <i class="fa-solid fa-lock"></i>
+              <span>Change Password</span>
+            }
+          </button>
+        </div>
+
+        <!-- Logout -->
+        <button
+          type="button"
+          (click)="signOut()"
+          class="inline-flex items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+
+      <!-- ==================== Change Password ==================== -->
+      @if (changePassword()) {
+        <div class="mt-4">
+          <app-change-password (closeFrom)="closeChangePasswordFrom()"></app-change-password>
+        </div>
+      }
+
+      <!-- ==================== Edit Profile ==================== -->
+      @if (editProfile()) {
+        <div class="mt-4">
+          <app-edit-profile (closeEditProfile)="closeEditProfile()"></app-edit-profile>
+        </div>
+      }
+    </div>
+  </section>
+}

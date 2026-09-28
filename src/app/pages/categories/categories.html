@@ -1,0 +1,88 @@
+<section class="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+  <div class="max-w-362.5 mx-auto">
+    <!-- Header -->
+    <div class="mb-3">
+      <h1 class="text-3xl sm:text-4xl text-gray-900 dark:text-white">Categories</h1>
+
+      <p class="mt-2 text-gray-500 dark:text-slate-400">Explore our product categories</p>
+    </div>
+
+    <!-- Loading -->
+    @if (loading()) {
+      <app-all-categories-skeleton></app-all-categories-skeleton>
+    }
+
+    <!-- Error -->
+    @else if (error()) {
+      <app-error-ui-component [message]="errorMessage()" (retry)="loadCategories(pageNumber())" />
+    }
+
+    <!-- Categories -->
+    @else {
+      <!-- Results Info -->
+      @if (allCategory().length > 0) {
+        <div class="flex items-center justify-between mb-5 w-full">
+          <p class="text-sm text-gray-500 dark:text-slate-400">
+            Showing
+            <span class="font-semibold text-gray-800 dark:text-white">
+              {{ allCategory().length }}
+            </span>
+            Categories
+          </p>
+          <p class="mt-1 text-sm text-gray-500 dark:text-slate-400">
+            Page
+            <span class="font-semibold text-gray-800 dark:text-white">{{ pageNumber() }}</span>
+            of {{ numberOfPages() }}
+          </p>
+        </div>
+      }
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+        @for (category of allCategory(); track category._id) {
+          <a
+            [routerLink]="['/category', category._id]"
+            class="group overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+          >
+            <!-- Image -->
+            <div class="relative h-48 overflow-hidden bg-gray-100 dark:bg-slate-800">
+              <img
+                [src]="category.image"
+                [alt]="category.name"
+                [title]="category.name"
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+
+              <div
+                class="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-70"
+              ></div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-4">
+              <h2
+                class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-main-color transition-colors"
+              >
+                {{ category.name }}
+              </h2>
+
+              <div class="mt-2 flex items-center justify-between text-sm">
+                <span class="text-gray-500 dark:text-slate-400"> View category </span>
+
+                <i
+                  class="fa-solid fa-arrow-right text-main-color group-hover:translate-x-1 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+
+      <!-- Pagination -->
+      <app-pagination-component
+        [currentPage]="pageNumber()"
+        [numberOfPages]="numberOfPages()"
+        (action)="goToPage($event)"
+      ></app-pagination-component>
+    }
+  </div>
+</section>

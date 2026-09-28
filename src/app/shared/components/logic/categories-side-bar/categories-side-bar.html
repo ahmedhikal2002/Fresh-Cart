@@ -1,0 +1,113 @@
+<div>
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+      Categories
+    </h3>
+
+    @if (selectedCategories().length > 0) {
+      <button
+        type="button"
+        (click)="clearSelectedCategories()"
+        class="text-xs font-medium text-main-color hover:underline transition"
+      >
+        Clear
+      </button>
+    }
+  </div>
+
+  <div class="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+    @if (allCategoriesLoading()) {
+      <app-categories-sidebar-skeleton></app-categories-sidebar-skeleton>
+
+    } @else if (allCategoriesError()) {
+      <app-error-ui-component
+        [message]="allCategoriesErrMsg()"
+        (retry)="loadCategories()"
+      ></app-error-ui-component>
+
+    } @else {
+      @if (categoriesDetailsComponent()) {
+        <label
+          class="group flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200"
+          [class.bg-main-color/5]="isAllSelected()"
+          [class.dark:bg-main-color/10]="isAllSelected()"
+          [class.hover:bg-gray-100]="!isAllSelected()"
+          [class.dark:hover:bg-slate-800]="!isAllSelected()"
+        >
+          <input
+            type="checkbox"
+            [checked]="isAllSelected()"
+            (change)="filterByCategory($event, '')"
+            class="sr-only"
+          />
+
+          <div
+            class="w-4 h-4 shrink-0 rounded border-2 flex items-center justify-center transition-all duration-200"
+            [class.bg-main-color]="isAllSelected()"
+            [class.border-main-color]="isAllSelected()"
+            [class.border-gray-300]="!isAllSelected()"
+            [class.dark:border-slate-600]="!isAllSelected()"
+          >
+            @if (isAllSelected()) {
+              <i class="fa-solid fa-check text-white text-2xs"></i>
+            }
+          </div>
+
+          <span
+            class="text-sm font-medium truncate transition-colors"
+            [class.text-main-color]="isAllSelected()"
+            [class.text-gray-700]="!isAllSelected()"
+            [class.dark:text-slate-200]="!isAllSelected()"
+          >
+            All Categories
+          </span>
+        </label>
+      }
+
+      @for (category of allCategory(); track category._id) {
+        <label
+          class="group flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200"
+          [class.bg-main-color/5]="isSelected(category._id)"
+          [class.dark:bg-main-color/10]="isSelected(category._id)"
+          [class.hover:bg-gray-100]="!isSelected(category._id)"
+          [class.dark:hover:bg-slate-800]="!isSelected(category._id)"
+        >
+          <input
+            type="checkbox"
+            [checked]="isSelected(category._id)"
+            (change)="filterByCategory($event, category._id)"
+            class="sr-only"
+          />
+
+          <div
+            class="w-4 h-4 shrink-0 rounded border-2 flex items-center justify-center transition-all duration-200"
+            [class.bg-main-color]="isSelected(category._id)"
+            [class.border-main-color]="isSelected(category._id)"
+            [class.border-gray-300]="!isSelected(category._id)"
+            [class.dark:border-slate-600]="!isSelected(category._id)"
+          >
+            @if (isSelected(category._id)) {
+              <i class="fa-solid fa-check text-white text-2xs"></i>
+            }
+          </div>
+
+          <span
+            class="text-sm font-medium truncate transition-colors"
+            [class.text-main-color]="isSelected(category._id)"
+            [class.text-gray-700]="!isSelected(category._id)"
+            [class.dark:text-slate-200]="!isSelected(category._id)"
+          >
+            {{ category.name }}
+          </span>
+        </label>
+      }
+
+      @if (allCategory().length === 0) {
+        <div class="px-3 py-6 text-center">
+          <i class="fa-solid fa-folder-open text-2xl text-gray-300 dark:text-slate-600"></i>
+          <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">No categories found</p>
+        </div>
+      }
+    }
+  </div>
+</div>
