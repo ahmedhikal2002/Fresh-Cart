@@ -44,7 +44,7 @@ export class AllOrders {
           this.errMsg.set('');
           this.error.set(false);
           const sortedOrders = [...res].sort(
-            (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
           this.orders.set(sortedOrders);
         },

@@ -247,28 +247,33 @@
             </div>
             <div class="mt-4">
               <form
-                class="w-full flex gap-2 items-baseline"
+                class="w-full flex sm:flex-col md:flex-row xs:flex-row gap-2 items-start"
                 [formGroup]="couponForm"
                 (ngSubmit)="applyCoupon()"
               >
                 @let couponName = couponForm.get('couponName');
-                <div>
+
+                <!-- input + errors -->
+                <div class="flex-1 min-w-0">
                   <input
                     formControlName="couponName"
                     type="text"
                     placeholder="Coupon code"
-                    class="flex-1 px-3 py-2 border rounded-lg dark:bg-slate-800"
+                    class="w-full px-3 py-2 border rounded-lg dark:bg-slate-800"
                   />
                   @if (couponName?.errors && couponName?.touched) {
                     @if (couponName?.getError('required')) {
-                      <p class="text-[14px] text-red-500">Coupon is required</p>
+                      <p class="text-[14px] text-red-500 mt-1">Coupon is required</p>
                     } @else if (couponName?.getError('notExist')) {
-                      <p class="text-[14px] text-red-500">{{ errMsgCoupon() }}</p>
+                      <p class="text-[14px] text-red-500 mt-1">{{ errMsgCoupon() }}</p>
                     }
                   }
                 </div>
+
+                <!-- Apply button -->
                 <button
-                  class="px-4 py-2 mx-auto bg-main-color text-white rounded-lg hover:opacity-90"
+                  type="submit"
+                  class="px-4 py-2 bg-main-color text-white rounded-lg hover:opacity-90 disabled:opacity-60 shrink-0 self-start"
                   [disabled]="loadCoupon()"
                 >
                   @if (loadCoupon()) {

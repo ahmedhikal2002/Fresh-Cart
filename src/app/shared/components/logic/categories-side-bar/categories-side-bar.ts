@@ -104,6 +104,9 @@ export class CategoriesSideBar implements OnInit {
 
   clearSelectedCategories(): void {
     this.selectedCategories.set([]);
+    if (this.categoriesDetailsComponent()) {
+      this.router.navigate(['/category', 'all']);
+    }
   }
 
   ngOnInit(): void {
