@@ -249,6 +249,9 @@ export class Cart implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.cartService.cart() !== null) {
+      return;
+    }
     this.loadCart();
   }
 }
