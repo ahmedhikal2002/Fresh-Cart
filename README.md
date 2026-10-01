@@ -1,59 +1,192 @@
-# EcommerceApp
+# 🛒 Fresh Cart
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
+A modern E-commerce application built with **Angular 21**, **SSR**, and **Route API**.
 
-## Development server
+Fresh Cart focuses not only on connecting UI pages to an API, but also on building a smooth user experience, handling real-world UI states, and applying modern Angular concepts.
 
-To start a local development server, run:
+## 🔗 Links
+
+* **Live Demo:** https://lnkd.in/e4Uq6jYe
+* **GitHub:** https://github.com/ahmedhikal2002/Fresh-Cart
+
+---
+
+## ✨ Features
+
+### 🛍️ Shopping Experience
+
+* Browse products and categories
+* Product search and filtering
+* Product details with reviewing
+* Add products to cart
+* Update product quantities
+* Optimistic UI updates for cart actions
+* Complete shopping flow:
+  `Product Details → Cart → Checkout → Orders → Order Details`
+
+### 💳 Checkout & Orders
+
+* Checkout with saved addresses
+* Latest added address is automatically selected as the default address
+* Ability to enter a new address during checkout
+* View previous orders
+* View detailed order information
+
+### ⭐ Reviews
+
+* Add reviews
+* Edit reviews
+* Delete reviews
+
+### 👤 Profile & Addresses
+
+* Update user information
+* Change password
+* Manage saved addresses
+
+### 🎨 UI & UX
+
+* Dark / Light mode
+* Loading skeletons
+* Responsive design
+* Form validation
+* Prevents whitespace-only input
+* Toast notifications
+* Error handling with rollback for optimistic updates
+
+---
+
+## 🧠 Technical Highlights
+
+### ⚡ Optimistic UI Updates
+
+Cart actions update the UI immediately without waiting for the API response.
+
+If the request fails, the previous state is restored through a rollback mechanism.
+
+### 🔄 Angular Signals
+
+Used **Angular Signals** for reactive state management.
+
+I also used `computed()` to solve a cart state synchronization issue that appeared during development.
+
+### 🔗 RxJS
+
+Used RxJS operators for handling asynchronous operations and API workflows.
+
+* `expand` for retrieving all paginated Brand API results
+* `reduce` for combining the retrieved results
+* `switchMap` for connecting product quantity selection with the add-to-cart flow
+* `catchError` and `throwError` for error handling
+
+---
+
+## 🛠️ Tech Stack
+
+* Angular 21
+* TypeScript
+* RxJS
+* Angular Signals
+* Tailwind CSS
+* Angular SSR
+* Route API
+* Font Awesome
+* SweetAlert2
+* ngx-toastr
+* Owl Carousel
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have **Node.js** and **npm** installed.
+
+### Installation
+
+Clone the repository:
 
 ```bash
-ng serve
+git clone https://github.com/ahmedhikal2002/Fresh-Cart.git
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Navigate to the project:
 
 ```bash
-ng generate component component-name
+cd Fresh-Cart
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Install dependencies:
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
+### Development Server
 
-To build the project run:
+Run the development server:
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Then open:
 
-## Running unit tests
+```text
+http://localhost:4200/
+```
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+---
+
+## 🏗️ Production Build
+
+Build the application:
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
+The production build will be generated inside the `dist/` directory.
 
-For end-to-end (e2e) testing, run:
+### SSR
+
+The project is configured with Angular SSR.
+
+To run the generated SSR application:
 
 ```bash
-ng e2e
+npm run serve:ssr:ecommerce-app
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📚 What I Learned
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project was an opportunity to move from learning concepts theoretically to applying them in a real application.
+
+Some of the main concepts I practiced were:
+
+* Optimistic UI updates and rollback
+* Angular Signals and `computed()`
+* Advanced RxJS operators
+* API pagination handling
+* Reactive UI state management
+* Error handling
+* Loading and empty states
+* Form validation
+* SSR with Angular
+* Building a complete E-commerce flow
+
+The biggest takeaway was that **practical development exposes problems that you don't always notice while following a course**. Each problem became an opportunity to learn a new concept and understand it through actual implementation.
+
+---
+
+## 👨‍💻 Author
+
+**Ahmed Hikal**
+
+Junior Angular / Frontend Developer
+
+* GitHub: https://github.com/ahmedhikal2002
+* LinkedIn: https://www.linkedin.com/in/ahmed-hikal-b479aa325/
