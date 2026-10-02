@@ -1,18 +1,9 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  PLATFORM_ID,
-  signal,
-  computed,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ToastrService } from 'ngx-toastr';
 import { CartService } from '../../core/services/cart/cart-service';
 import { CheckoutService } from '../../core/services/checkout/checkout-service';
 import { ErrorUiComponent } from '../../shared/components/ui/error/error-ui-component/error-ui-component';
@@ -20,6 +11,7 @@ import { CheckoutSkeleton } from '../../shared/components/skeleton/checkout-skel
 import { ProfileService } from '../../core/services/profile/profile-service';
 import { IAddress } from '../../shared/interfaces/profile/profile';
 import { noWhitespace } from '../../shared/validators/custom-validators';
+import { ToastService } from '../../core/services/Toast/toast-service';
 
 type paymentMethod = 'cash' | 'visa';
 
@@ -33,7 +25,7 @@ export class Checkout implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly checkoutService = inject(CheckoutService);
   private readonly router = inject(Router);
-  private readonly toastr = inject(ToastrService);
+  private readonly toastr = inject(ToastService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cartId = signal<string>('');
@@ -103,7 +95,7 @@ export class Checkout implements OnInit {
           this.cartService.cart.set(res.data);
           this.totalPrice.set(res.data.totalCartPrice);
           if (res.data.products.length === 0) {
-            this.toastr.info('Your cart is empty');
+            this.toastr.toast('Your cart is empty');
             this.router.navigate(['/cart'], { replaceUrl: true });
           }
         },
@@ -147,7 +139,7 @@ export class Checkout implements OnInit {
           this.processingOrder.set(false);
           this.cashOrderMessageError.set('');
           this.errorCashOrder.set(false);
-          this.toastr.success(res.message || 'Order placed successfully');
+          this.toastr.toastSuccess(res.message || 'Order placed successfully');
           this.cartService.clearCartOptimistic();
           this.router.navigate(['/allorders'], { replaceUrl: true });
         },
@@ -182,7 +174,7 @@ export class Checkout implements OnInit {
           if (checkoutUrl) {
             window.location.href = checkoutUrl;
           } else {
-            this.toastr.error('Unable to start the payment session');
+            this.toastr.ToastError('Unable to start the payment session');
           }
         },
         error: (err: HttpErrorResponse) => {
