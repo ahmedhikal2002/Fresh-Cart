@@ -55,6 +55,22 @@ Fresh Cart focuses not only on connecting UI pages to an API, but also on buildi
 * Error handling with rollback for optimistic updates
 
 ---
+## 📸 Screenshots
+
+| Home | Products |
+|------|----------|
+| ![Home](./screenshots/Home.png) | ![Products](./screenshots/Products.png) |
+
+| Product Details | Cart |
+|-----------------|------|
+| ![Product Details](./screenshots/Product Details.png) | ![Cart](./screenshots/Cart.png) |
+
+| Checkout | Orders |
+|-----------------|------|
+| ![Checkout](./screenshots/Checkout.png) | ![Orders](./screenshots/Orders.png) |
+
+### 📋 Order Details
+![order details](./screenshots/Order Details.png)
 
 ## 🧠 Technical Highlights
 
