@@ -6,8 +6,8 @@ Fresh Cart focuses not only on connecting UI pages to an API, but also on buildi
 
 ## 🔗 Links
 
-* **Live Demo:** https://lnkd.in/e4Uq6jYe
-* **GitHub:** https://github.com/ahmedhikal2002/Fresh-Cart
+- **Live Demo:** https://lnkd.in/e4Uq6jYe
+- **GitHub:** https://github.com/ahmedhikal2002/Fresh-Cart
 
 ---
 
@@ -15,44 +15,64 @@ Fresh Cart focuses not only on connecting UI pages to an API, but also on buildi
 
 ### 🛍️ Shopping Experience
 
-* Browse products and categories
-* Product search and filtering
-* Product details with reviewing
-* Add products to cart
-* Update product quantities
-* Optimistic UI updates for cart actions
-* Complete shopping flow:
+- Browse products and categories
+- Product search and filtering
+- Product details with reviewing
+- Add products to cart
+- Update product quantities
+- Optimistic UI updates for cart actions
+- Complete shopping flow:
   `Product Details → Cart → Checkout → Orders → Order Details`
 
 ### 💳 Checkout & Orders
 
-* Checkout with saved addresses
-* Latest added address is automatically selected as the default address
-* Ability to enter a new address during checkout
-* View previous orders
-* View detailed order information
+- Checkout with saved addresses
+- Latest added address is automatically selected as the default address
+- Ability to enter a new address during checkout
+- View previous orders
+- View detailed order information
 
 ### ⭐ Reviews
 
-* Add reviews
-* Edit reviews
-* Delete reviews
+- Add reviews
+- Edit reviews
+- Delete reviews
 
 ### 👤 Profile & Addresses
 
-* Update user information
-* Change password
-* Manage saved addresses
+- Update user information
+- Change password
+- Manage saved addresses
 
 ### 🎨 UI & UX
 
-* Dark / Light mode
-* Loading skeletons
-* Responsive design
-* Form validation
-* Prevents whitespace-only input
-* Toast notifications
-* Error handling with rollback for optimistic updates
+- Dark / Light mode
+- Loading skeletons
+- Responsive design
+- Form validation
+- Prevents whitespace-only input
+- Toast notifications
+- Error handling with rollback for optimistic updates
+
+---
+
+## 📸 Screenshots
+
+| Home                            | Products                                |
+| ------------------------------- | --------------------------------------- |
+| ![Home](./screenshots/Home.png) | ![Products](./screenshots/Products.png) |
+
+| Product Details                                      | Cart                            |
+| ---------------------------------------------------- | ------------------------------- |
+| ![Product Details](./screenshots/ProductDetails.png) | ![Cart](./screenshots/Cart.png) |
+
+| Checkout                                | Orders                                |
+| --------------------------------------- | ------------------------------------- |
+| ![Checkout](./screenshots/Checkout.png) | ![Orders](./screenshots/MyOrders.png) |
+
+| Order Details                                    | Profile                               |
+| ------------------------------------------------ | ------------------------------------- |
+| ![order details](./screenshots/OrderDetails.png) | ![Profile](./screenshots/profile.png) |
 
 ---
 ## 📸 Screenshots
@@ -90,26 +110,26 @@ I also used `computed()` to solve a cart state synchronization issue that appear
 
 Used RxJS operators for handling asynchronous operations and API workflows.
 
-* `expand` for retrieving all paginated Brand API results
-* `reduce` for combining the retrieved results
-* `switchMap` for connecting product quantity selection with the add-to-cart flow
-* `catchError` and `throwError` for error handling
+- `expand` for retrieving all paginated Brand API results
+- `reduce` for combining the retrieved results
+- `switchMap` for connecting product quantity selection with the add-to-cart flow
+- `catchError` and `throwError` for error handling
 
 ---
 
 ## 🛠️ Tech Stack
 
-* Angular 21
-* TypeScript
-* RxJS
-* Angular Signals
-* Tailwind CSS
-* Angular SSR
-* Route API
-* Font Awesome
-* SweetAlert2
-* ngx-toastr
-* Owl Carousel
+- Angular 21
+- TypeScript
+- RxJS
+- Angular Signals
+- Tailwind CSS
+- Angular SSR
+- Route API
+- Font Awesome
+- SweetAlert2
+- ngx-toastr
+- Owl Carousel
 
 ---
 
@@ -183,16 +203,16 @@ This project was an opportunity to move from learning concepts theoretically to 
 
 Some of the main concepts I practiced were:
 
-* Optimistic UI updates and rollback
-* Angular Signals and `computed()`
-* Advanced RxJS operators
-* API pagination handling
-* Reactive UI state management
-* Error handling
-* Loading and empty states
-* Form validation
-* SSR with Angular
-* Building a complete E-commerce flow
+- Optimistic UI updates and rollback
+- Angular Signals and `computed()`
+- Advanced RxJS operators
+- API pagination handling
+- Reactive UI state management
+- Error handling
+- Loading and empty states
+- Form validation
+- SSR with Angular
+- Building a complete E-commerce flow
 
 The biggest takeaway was that **practical development exposes problems that you don't always notice while following a course**. Each problem became an opportunity to learn a new concept and understand it through actual implementation.
 
@@ -204,5 +224,5 @@ The biggest takeaway was that **practical development exposes problems that you 
 
 Junior Angular / Frontend Developer
 
-* GitHub: https://github.com/ahmedhikal2002
-* LinkedIn: https://www.linkedin.com/in/ahmed-hikal-b479aa325/
+- GitHub: https://github.com/ahmedhikal2002
+- LinkedIn: https://www.linkedin.com/in/ahmed-hikal-b479aa325/
